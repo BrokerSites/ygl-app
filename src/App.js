@@ -1,24 +1,17 @@
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import ListingsContainer from './components/ListingsContainer'
+import MapComponent from './components/MapComponent';
+import listingsData from './sample.json';
 
-function App() {
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/512px-React-icon.svg.png" className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="listings-and-map">
+      <ListingsContainer />
+      <MapComponent listings={listingsData.listings} />
     </div>
   );
-}
+};
 
 export default App;
