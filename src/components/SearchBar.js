@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 
-const SearchBar = () => {
+const SearchBar = ({ toggleView, isMapView }) => {
     const [searchText, setSearchText] = useState('');
 
     // Handle the form submission
@@ -55,8 +55,8 @@ const SearchBar = () => {
             </div>
             <div className="row mobile-options">
                 <div className="col-auto ms-auto">
-                    <button className="btn btn-outline-primary" type="button">
-                        Map
+                <button className="btn btn-outline-primary" type="button" onClick={toggleView}>
+                        {isMapView ? 'List' : 'Map'}
                     </button>
                 </div>
                 <div className="col-auto">
