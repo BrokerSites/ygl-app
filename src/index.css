@@ -1,4 +1,5 @@
 /* index.css */
+@import '~bootstrap-icons/font/bootstrap-icons.css';
 
 /* Existing styles */
 body {
@@ -10,10 +11,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-body, html{
+body,
+html {
   margin: 0;
   height: 100%;
-  overflow: hidden; /* Prevent scrolling on the entire page */
+  overflow: hidden;
+  /* Prevent scrolling on the entire page */
 }
 
 code {
@@ -24,32 +27,40 @@ code {
 /* New styles for ListingCard */
 .card {
   display: flex;
-  flex-direction: row; /* Align children (image and text) side by side */
+  flex-direction: row;
+  /* Align children (image and text) side by side */
   margin: 1rem;
-  width: 100%; /* Or specific width as needed */
+  width: 100%;
+  /* Or specific width as needed */
   height: 10em;
   min-width: 0;
 }
 
 .card-img-top {
-  width: 50%; /* Adjust based on desired image width */
+  width: 50%;
+  /* Adjust based on desired image width */
   height: auto;
-  object-fit: cover; /* Ensures the image covers the area nicely */
+  object-fit: cover;
+  /* Ensures the image covers the area nicely */
 }
 
 .card-body {
-  flex: 1; /* Takes the remaining space */
-  padding: 0.5rem; /* Adjust padding as needed */
+  flex: 1;
+  /* Takes the remaining space */
+  padding: 0.5rem;
+  /* Adjust padding as needed */
 }
 
 
-.listings-container{
+.listings-container {
   max-width: 40%;
   min-width: 500px;
-  overflow-y: auto; /* Enable vertical scrolling only within the listings container */
+  overflow-y: auto;
+  /* Enable vertical scrolling only within the listings container */
   overflow-x: hidden;
   padding-right: 2em;
-  scrollbar-gutter: stable; /* Reserve space for the scrollbar */
+  scrollbar-gutter: stable;
+  /* Reserve space for the scrollbar */
 }
 
 @media (max-width: 1000px) {
@@ -62,23 +73,76 @@ code {
 
 .listings-and-map {
   display: flex;
-  flex-direction: row; /* Assuming you want a column layout */
-  height: 100vh; /* 100% of the viewport height */
-  overflow: hidden; /* Prevent scrolling on the app container */
+  flex-direction: row;
+  /* Assuming you want a column layout */
+  height: 92vh;
+  /* 100% of the viewport height */
+  overflow: hidden;
+  /* Prevent scrolling on the app container */
 }
 
 .custom-icon {
   text-align: center;
-  border: 1px solid #333; /* Example border */
+  border: 1px solid #333;
+  /* Example border */
   background-color: #fff;
   border-radius: 5px;
   background-color: white;
-  padding: 5px; 
-  border-radius: 5px; 
-  min-width: 60px; 
+  padding: 5px;
+  border-radius: 5px;
+  min-width: 60px;
   text-align: center;
 }
 
-.leaflet-marker-icon .custom-icon .leaflet-zoom-animated .leaflet-interactive{
+.leaflet-marker-icon .custom-icon .leaflet-zoom-animated .leaflet-interactive {
   height: 30px;
+}
+
+.map-container {
+  height: 100%;
+  /* or any specific height */
+  width: 100%;
+}
+
+/* Assuming "listings-and-map" takes full width and you want to hide the map under 1000px width screens */
+@media (max-width: 1000px) {
+  .map-container {
+    display: none !important;
+
+  }
+}
+
+.search-bar {
+  padding: .75em;
+
+}
+
+.search-input {
+  max-width: 840px
+}
+
+@media (min-width: 1000px) {
+  .mobile-options {
+    display: none;
+  }
+  
+
+}
+
+@media (max-width: 1000px) {
+
+  .bb-btn,
+  .bb-btn,
+  .md-btn,
+  .price-btn {
+    display: none;
+  }
+  .first-row{
+    margin-bottom: .5rem;
+  }
+
+}
+
+.row{
+  --bs-gutter-x: .75rem;
 }
