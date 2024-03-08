@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import Autocomplete from './Autocomplete';
 
 
-const SearchBar = ({ toggleView, isMapView }) => {
+const SearchBar = ({ cities, toggleView, isMapView, }) => {
     const [searchText, setSearchText] = useState('');
 
     // Handle the form submission
@@ -15,18 +16,12 @@ const SearchBar = ({ toggleView, isMapView }) => {
             <div className="row  first-row">
                 <div className="col search-input">
                     <form onSubmit={handleSubmit}>
-                        <div className="input-group">
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="City or Neighborhood"
-                                value={searchText}
-                                onChange={(e) => setSearchText(e.target.value)}
-                            />
-                                <button className="btn btn-outline-primary" type="submit">
-                                    <i className="bi bi-search"></i> {/* Use the icon here */}
-                                </button>
-                        </div>
+                    <div className="input-group">
+                    <Autocomplete cities={cities} />
+                    <button className="btn btn-outline-primary" type="submit">
+                        <i className="bi bi-search"></i> {/* Use the icon here */}
+                    </button>
+                </div>
                     </form>
                 </div>
                 <div className="col-auto price-btn">

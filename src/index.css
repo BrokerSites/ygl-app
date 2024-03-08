@@ -173,3 +173,23 @@ code {
       display: block;
   }
 }
+
+.autocomplete-container {
+  position: absolute;
+  top: 100%; /* Directly below the input field */
+  left: 0;
+  width: 100%;
+  background-color: white;
+  border: 1px solid #ddd;
+  z-index: 2000; /* Make sure it's on top of other content */
+}
+
+.autocomplete-item {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item:focus {
+  background-color: #efefef;
+}
