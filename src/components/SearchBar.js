@@ -15,13 +15,13 @@ const SearchBar = ({ cities, toggleView, isMapView, }) => {
         <div className="search-bar">
             <div className="row  first-row">
                 <div className="col search-input">
-                    <form onSubmit={handleSubmit}>
-                    <div className="input-group">
-                    <Autocomplete cities={cities} />
-                    <button className="btn btn-outline-primary" type="submit">
-                        <i className="bi bi-search"></i> {/* Use the icon here */}
-                    </button>
-                </div>
+                    <form onSubmit={handleSubmit} className="w-100 d-flex">
+                        <div className="input-group">
+                            <Autocomplete cities={cities} setSearchText={setSearchText} />
+                            <button className="btn btn-outline-primary" type="submit">
+                            <i className="bi bi-search"></i> {/* Use the icon here */}
+                            </button>
+                        </div>
                     </form>
                 </div>
                 <div className="col-auto price-btn">

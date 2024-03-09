@@ -193,3 +193,40 @@ code {
 .autocomplete-item:focus {
   background-color: #efefef;
 }
+
+.input-group {
+  display: flex;  /* Ensures flexbox layout */
+  align-items: stretch; /* Makes sure children of input-group are the same height */
+  width: 100%;  /* Take up all available width */
+  flex-wrap: nowrap;
+}
+
+.input-group > input {
+  flex-grow: 1;  /* Allow input to grow */
+}
+
+.input-group > button {
+  flex-shrink: 0; /* Prevent button from shrinking */
+}
+
+/* Use a media query to ensure proper display on smaller screens */
+@media (max-width: 768px) {
+  .input-group {
+    flex-direction: column; /* Stack them on top of each other on small screens */
+  }
+
+  .input-group > button,
+  .input-group > input {
+    width: 100%; /* Full width on small screens */
+  }
+}
+
+.autocomplete-wrapper{
+  width: 100%;
+}
+
+.form-control.custom-rounded {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  /* The left corners retain the default border-radius from Bootstrap or your custom value */
+}
