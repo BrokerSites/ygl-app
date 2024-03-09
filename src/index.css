@@ -175,6 +175,9 @@ code {
 }
 
 .autocomplete-container {
+  list-style-type: none; /* Removes bullet points */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
   position: absolute;
   top: 100%; /* Directly below the input field */
   left: 0;
@@ -183,6 +186,7 @@ code {
   border: 1px solid #ddd;
   z-index: 2000; /* Make sure it's on top of other content */
 }
+
 
 .autocomplete-item {
   padding: 0.5rem;
@@ -211,11 +215,8 @@ code {
 
 /* Use a media query to ensure proper display on smaller screens */
 @media (max-width: 768px) {
-  .input-group {
-    flex-direction: column; /* Stack them on top of each other on small screens */
-  }
 
-  .input-group > button,
+
   .input-group > input {
     width: 100%; /* Full width on small screens */
   }

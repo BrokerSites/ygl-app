@@ -12,47 +12,46 @@ const App = () => {
     const [cities, setCities] = useState([]);
 
     useEffect(() => {
-      const fetchCitiesAndNeighborhoods = async () => {
-        try {
+        const fetchCitiesAndNeighborhoods = async () => {
+          try {
             const response = await axios.post('http://ec2-3-142-154-120.us-east-2.compute.amazonaws.com:3000/api/accounts');
             const xmlData = response.data;
-    
+      
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(xmlData, "text/xml");
-    
-            let searchQuery = [];
-    
+      
+            let cityList = []; // Store city names
+            let neighborhoodList = []; // Store "Neighborhood (City)" strings
+      
             const accounts = xmlDoc.getElementsByTagName('Account');
             Array.from(accounts).forEach(account => {
-                const cities = account.getElementsByTagName('City');
-                Array.from(cities).forEach(cityElement => {
-                    const nameElements = cityElement.getElementsByTagName('Name');
-                    if (nameElements.length > 0) {
-                        const cityName = nameElements[0].textContent.trim();
-                        const neighborhoods = cityElement.getElementsByTagName('Neighborhood');
-    
-                        if (neighborhoods.length > 0) {
-                            Array.from(neighborhoods).forEach(neighborhoodElement => {
-                                const neighborhoodName = neighborhoodElement.textContent.trim();
-                                searchQuery.push(`${cityName}:${neighborhoodName}`);
-                            });
-                        } else {
-                            searchQuery.push(cityName);
-                        }
-                    }
-                });
+              const cities = account.getElementsByTagName('City');
+              Array.from(cities).forEach(cityElement => {
+                const nameElements = cityElement.getElementsByTagName('Name');
+                if (nameElements.length > 0) {
+                  const cityName = nameElements[0].textContent.trim();
+                  cityList.push(cityName);
+                  const neighborhoods = cityElement.getElementsByTagName('Neighborhood');
+      
+                  Array.from(neighborhoods).forEach(neighborhoodElement => {
+                    const neighborhoodName = neighborhoodElement.textContent.trim();
+                    neighborhoodList.push(`${neighborhoodName} (${cityName})`);
+                  });
+                }
+              });
             });
-    
-            const searchQueryString = searchQuery.join(',');
-            console.log("Search Query String:", searchQueryString);
-    
-            setCities(searchQuery); // Changed to store the array directly, consider renaming the state if it's not just cities
-        } catch (error) {
+      
+            // Combine the lists, ensuring unique values only.
+            const combinedList = [...new Set([...cityList, ...neighborhoodList])];
+            setCities(combinedList); // Update state with the combined list
+      
+          } catch (error) {
             console.error('Error fetching XML data:', error);
-        }
-    };
+          }
+        };
         fetchCitiesAndNeighborhoods();
-    }, []);
+      }, []);
+      
 
     const toggleMobileView = () => setIsMobileMapView(!isMobileMapView);
 
