@@ -19,18 +19,28 @@ function Autocomplete({ cities, setSearchText, onSelectTag }) {
   };
 
   const handleSelectItem = (item) => {
-    setSearchText(item); // You might want to remove this if you don't need to keep the searchText state updated here
-    onSelectTag(item);
-    setInputValue('');
-    setSuggestions([]);
-  };
+        if (cities.includes(item) || /\(.+\)/.test(item)) {
+            setSearchText(item);
+            onSelectTag(item); // Only call onSelectTag if the item is valid
+        }
+        setInputValue('');
+        setSuggestions([]);
+    };
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && suggestions.length > 0) {
-      e.preventDefault(); // Prevent the form from being submitted
-      handleSelectItem(suggestions[0]);
+        e.preventDefault(); // Prevent the form from being submitted
+        const matchedSuggestion = suggestions.find(suggestion => 
+            suggestion.toLowerCase().startsWith(inputValue.trim().toLowerCase())
+        );
+        if (matchedSuggestion) {
+            setSearchText(matchedSuggestion);
+            onSelectTag(matchedSuggestion); // Only call onSelectTag if the suggestion is valid
+            setInputValue('');
+            setSuggestions([]);
+        }
     }
-  };
+};
 
   const handleKeyDown = (e) => {
     if (e.key === 'Backspace' && suggestions.includes(inputValue)) {

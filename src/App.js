@@ -14,10 +14,13 @@ const App = () => {
     const [cityNeighborhood, setCityNeighborhood] = useState('');
 
     const handleSelectTag = (tag) => {
-        if (!selectedTags.includes(tag)) {
-            setSelectedTags([...selectedTags, tag]);
-        }
-    };
+      // Check if the tag is in the cities list or matches the pattern "Neighborhood (City)"
+      const isValidTag = cities.includes(tag) || /\(.+\)/.test(tag);
+      if (isValidTag && !selectedTags.includes(tag)) {
+          setSelectedTags([...selectedTags, tag]);
+      }
+  };
+  
 
     const handleRemoveTag = (tagToRemove) => {
         setSelectedTags(selectedTags.filter(tag => tag !== tagToRemove));
@@ -91,6 +94,10 @@ const App = () => {
         }).join(',');
         setCityNeighborhood(formatted);
     }, [selectedTags]);
+
+
+    //Organize the variables we will send to the API here, then put them under a greater variable. 
+    //Any time one of the minor variables change, the greater is updated and a new call is made
 
     useEffect(() => {
       console.log("city_neighborhood:", cityNeighborhood);
