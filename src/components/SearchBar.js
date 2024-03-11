@@ -19,7 +19,7 @@ const SearchBar = ({ cities, toggleView, isMapView, }) => {
                         <div className="input-group">
                             <Autocomplete cities={cities} setSearchText={setSearchText} />
                             <button className="btn btn-outline-primary" type="submit">
-                            <i className="bi bi-search"></i> {/* Use the icon here */}
+                                <i className="bi bi-search"></i> {/* Use the icon here */}
                             </button>
                         </div>
                     </form>
@@ -50,7 +50,7 @@ const SearchBar = ({ cities, toggleView, isMapView, }) => {
             </div>
             <div className="row mobile-options">
                 <div className="col-auto ms-auto">
-                <button className="btn btn-outline-primary" type="button" onClick={toggleView}>
+                    <button className="btn btn-outline-primary" type="button" onClick={toggleView}>
                         {isMapView ? 'List' : 'Map'}
                     </button>
                 </div>

@@ -160,7 +160,7 @@ code {
 }
 .mobile-view {
   display: none;
-  height: 100vh;
+  height: 83vh;
   overflow-y: auto;
 }
 
