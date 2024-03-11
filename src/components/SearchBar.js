@@ -49,6 +49,7 @@ const SearchBar = ({ cities, toggleView, isMapView, }) => {
                 </div>
             </div>
             <div className="row mobile-options">
+                
                 <div className="col-auto ms-auto">
                     <button className="btn btn-outline-primary" type="button" onClick={toggleView}>
                         {isMapView ? 'List' : 'Map'}

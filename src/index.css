@@ -11,7 +11,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.my-react-app{
+.my-react-app {
   height: 100%;
 }
 
@@ -38,6 +38,7 @@ code {
   /* Or specific width as needed */
   height: 10em;
   min-width: 0;
+  margin-right: 1em;
 }
 
 .card-img-top {
@@ -62,7 +63,6 @@ code {
   overflow-y: auto;
   /* Enable vertical scrolling only within the listings container */
   overflow-x: hidden;
-  padding-right: 2em;
   scrollbar-gutter: stable;
   /* Reserve space for the scrollbar */
 }
@@ -129,8 +129,10 @@ code {
   .mobile-options {
     display: none;
   }
-  
 
+  .card-container {
+    padding-right: 2rem;
+  }
 }
 
 @media (max-width: 1000px) {
@@ -141,16 +143,21 @@ code {
   .price-btn {
     display: none;
   }
-  .first-row{
+
+  .first-row {
     margin-bottom: .5rem;
   }
-  .listings-container{
+
+  .listings-container {
     padding-right: 1em;
   }
 
+  .tag-box-container {
+    display: none;
+  }
 }
 
-.row{
+.row {
   --bs-gutter-x: .75rem;
 }
 
@@ -158,6 +165,7 @@ code {
 .desktop-view {
   display: flex;
 }
+
 .mobile-view {
   display: none;
   height: 83vh;
@@ -166,25 +174,30 @@ code {
 
 @media (max-width: 1000px) {
   .desktop-view {
-      display: none;
+    display: none;
   }
 
   .mobile-view {
-      display: block;
+    display: block;
   }
 }
 
 .autocomplete-container {
-  list-style-type: none; /* Removes bullet points */
-  margin: 0; /* Remove default margin */
-  padding: 0; /* Remove default padding */
+  list-style-type: none;
+  /* Removes bullet points */
+  margin: 0;
+  /* Remove default margin */
+  padding: 0;
+  /* Remove default padding */
   position: absolute;
-  top: 100%; /* Directly below the input field */
+  top: 100%;
+  /* Directly below the input field */
   left: 0;
   width: 100%;
   background-color: white;
   border: 1px solid #ddd;
-  z-index: 2000; /* Make sure it's on top of other content */
+  z-index: 2000;
+  /* Make sure it's on top of other content */
 }
 
 
@@ -199,30 +212,36 @@ code {
 }
 
 .input-group {
-  display: flex;  /* Ensures flexbox layout */
-  align-items: stretch; /* Makes sure children of input-group are the same height */
-  width: 100%;  /* Take up all available width */
+  display: flex;
+  /* Ensures flexbox layout */
+  align-items: stretch;
+  /* Makes sure children of input-group are the same height */
+  width: 100%;
+  /* Take up all available width */
   flex-wrap: nowrap;
 }
 
-.input-group > input {
-  flex-grow: 1;  /* Allow input to grow */
+.input-group>input {
+  flex-grow: 1;
+  /* Allow input to grow */
 }
 
-.input-group > button {
-  flex-shrink: 0; /* Prevent button from shrinking */
+.input-group>button {
+  flex-shrink: 0;
+  /* Prevent button from shrinking */
 }
 
 /* Use a media query to ensure proper display on smaller screens */
 @media (max-width: 768px) {
 
 
-  .input-group > input {
-    width: 100%; /* Full width on small screens */
+  .input-group>input {
+    width: 100%;
+    /* Full width on small screens */
   }
 }
 
-.autocomplete-wrapper{
+.autocomplete-wrapper {
   width: 100%;
 }
 
@@ -230,4 +249,59 @@ code {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   /* The left corners retain the default border-radius from Bootstrap or your custom value */
+}
+
+.tag-box {
+  border: 1px solid #ccc;
+  padding: 8px;
+  min-height: 50px;
+  /* Minimum height to make it visible even when empty */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  /* Space between tags */
+  width: 100%;
+  border: var(--bs-border-width) solid var(--bs-border-color);
+}
+
+.tag-box-container {
+  position: sticky;
+  top: 0;
+  /* Adjust as needed, depending on your header size */
+  background-color: white;
+  /* Or any non-transparent color */
+  z-index: 10;
+  /* Ensures the tag box stays above other content */
+  padding: 1rem;
+  padding-bottom: .25rem;
+  padding-top: 0rem;
+  
+  /* Optional padding for aesthetic purposes */
+
+}
+
+.tag-placeholder {
+  color: #999;
+  display: flex;
+  align-items: center;
+  /* Vertically center placeholder text */
+  justify-content: center;
+  /* Horizontally center placeholder text */
+  height: 100%;
+  /* Full height of the parent .tag-box */
+}
+
+.tag {
+  display: flex;
+  align-items: center;
+  background-color: #e1e1e1;
+  border-radius: 16px;
+  padding: 4px 8px;
+}
+
+.tag button {
+  margin-left: 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
 }

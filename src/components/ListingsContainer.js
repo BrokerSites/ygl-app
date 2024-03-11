@@ -1,20 +1,28 @@
 import React from 'react';
 import ListingCard from './ListingCard.js';
-import listingsData from '../sample.json'; // Adjust the path if your sample.json is located elsewhere
+import TagBox from './TagBox'; // Import TagBox component
 
-const ListingsContainer = ({ listings }) => {
-  // Ensure that listings is an array before trying to map over it
+const ListingsContainer = ({ listings, selectedTags, onRemoveTag }) => {
   if (!Array.isArray(listings)) {
     console.error('Listings is not an array', listings);
-    return null; // or some error component
+    return null;
   }
+
+  // Provide an empty array as default if selectedTags is undefined
+  const tags = Array.isArray(selectedTags) ? selectedTags : [];
 
   return (
     <div className="listings-container">
-      {listings.map(listing => (
-        // make sure ListingCard can handle all the properties inside a listing
+      <div className="tag-box-container">
+      <TagBox tags={tags} onRemoveTag={onRemoveTag} />
+      </div>
+      
+    <div className='card-container'>
+    {listings.map(listing => (
         <ListingCard key={listing.id} listing={listing} />
       ))}
+    </div>
+
     </div>
   );
 };
