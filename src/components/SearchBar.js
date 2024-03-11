@@ -2,18 +2,15 @@ import React, { useState } from 'react';
 import Autocomplete from './Autocomplete';
 import TagBox from './TagBox'; // Import TagBox component
 
-const SearchBar = ({ cities, toggleView, isMapView, }) => {
+const SearchBar = ({ cities, onSelectTag, selectedTags, onRemoveTag, toggleView, isMapView, }) => {
     const [searchText, setSearchText] = useState('');
-    const [selectedTags, setSelectedTags] = useState([]); // Manage tags with state
+
 
     // Handle the form submission
     const handleSubmit = (event) => {
         event.preventDefault();
-        // Perform search logic here
-    };
-
-    const onRemoveTag = (tagToRemove) => {
-        setSelectedTags(selectedTags.filter(tag => tag !== tagToRemove));
+        onSelectTag(searchText);
+        setSearchText(''); // Clear search text after selecting
     };
 
     return (
@@ -22,7 +19,7 @@ const SearchBar = ({ cities, toggleView, isMapView, }) => {
                 <div className="col search-input">
                     <form onSubmit={handleSubmit} className="w-100 d-flex">
                         <div className="input-group">
-                            <Autocomplete cities={cities} setSearchText={setSearchText} />
+                            <Autocomplete cities={cities} onSelectTag={onSelectTag} setSearchText={setSearchText} />
                             <button className="btn btn-outline-primary" type="submit">
                                 <i className="bi bi-search"></i> {/* Use the icon here */}
                             </button>
