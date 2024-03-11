@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import Autocomplete from './Autocomplete';
-
+import TagBox from './TagBox'; // Import TagBox component
 
 const SearchBar = ({ cities, toggleView, isMapView, }) => {
     const [searchText, setSearchText] = useState('');
+    const [selectedTags, setSelectedTags] = useState([]); // Manage tags with state
 
     // Handle the form submission
     const handleSubmit = (event) => {
         event.preventDefault();
         // Perform search logic here
+    };
+
+    const onRemoveTag = (tagToRemove) => {
+        setSelectedTags(selectedTags.filter(tag => tag !== tagToRemove));
     };
 
     return (
@@ -49,7 +54,10 @@ const SearchBar = ({ cities, toggleView, isMapView, }) => {
                 </div>
             </div>
             <div className="row mobile-options">
-                
+                <div className="col mobile-tag-box-container">
+                    {/* Conditionally render TagBox only for mobile view */}
+                    <TagBox tags={selectedTags} onRemoveTag={onRemoveTag} />
+                </div>
                 <div className="col-auto ms-auto">
                     <button className="btn btn-outline-primary" type="button" onClick={toggleView}>
                         {isMapView ? 'List' : 'Map'}
