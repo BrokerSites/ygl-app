@@ -1,10 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, } from 'react';
 import Autocomplete from './Autocomplete';
 import TagBox from './TagBox'; // Import TagBox component
+import Slider from  '@mui/material/Slider';
+import Box from '@mui/material/Box'
 
-const SearchBar = ({ cities, onSelectTag, selectedTags, onRemoveTag, toggleView, isMapView, }) => {
+const SearchBar = ({ 
+    cities, 
+    onSelectTag, 
+    selectedTags, 
+    onRemoveTag, 
+    toggleView, 
+    isMapView,
+    minRent,
+    maxRent,
+    onMinRentChange,
+    onMaxRentChange, }) => {
+        
     const [searchText, setSearchText] = useState('');
-
+    const [showRentRange, setShowRentRange] = useState(false);
+    const [rentValues, setRentValues] = useState([minRent, maxRent]);
 
     // Handle the form submission
     const handleSubmit = (event) => {
@@ -12,6 +26,26 @@ const SearchBar = ({ cities, onSelectTag, selectedTags, onRemoveTag, toggleView,
         onSelectTag(searchText);
         setSearchText(''); // Clear search text after selecting
     };
+
+    const handleRentRangeChange = (event, newValue) => {
+        setRentValues(newValue);
+        onMinRentChange(newValue[0]);
+        onMaxRentChange(newValue[1]);
+        console.log(`Min Rent: ${newValue[0]}, Max Rent: ${newValue[1]}`); // Logging the range values
+      };
+
+      const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        let newValues = [...rentValues];
+        if (name === 'minRent') {
+          newValues[0] = Number(value);
+          onMinRentChange(Number(value));
+        } else if (name === 'maxRent') {
+          newValues[1] = Number(value);
+          onMaxRentChange(Number(value));
+        }
+        setRentValues(newValues);
+      };
 
     return (
         <div className="search-bar">
@@ -27,10 +61,37 @@ const SearchBar = ({ cities, onSelectTag, selectedTags, onRemoveTag, toggleView,
                     </form>
                 </div>
                 <div className="col-auto price-btn">
-                    <button className="btn btn-primary dropdown-toggle" type="button">
-                        Price
-                    </button>
-                    {/* Dropdown Menu */}
+                <button
+                    className="btn btn-primary dropdown-toggle"
+                    onClick={() => setShowRentRange(!showRentRange)}
+                >
+                    Price
+                </button>
+                    {showRentRange && (
+                    
+                    <Box>
+                    <Slider
+                      value={rentValues}
+                      onChange={handleRentRangeChange}
+                      valueLabelDisplay="auto"
+                      min={0}
+                      max={10000}
+                    />
+                    <input
+                      type="number"
+                      name="minRent"
+                      value={rentValues[0]}
+                      onChange={handleInputChange}
+                    />
+                    <input
+                      type="number"
+                      name="maxRent"
+                      value={rentValues[1]}
+                      onChange={handleInputChange}
+                    />
+                  </Box>
+                    
+                )}
                 </div>
                 <div className="col-auto bb-btn">
                     <button className="btn btn-primary dropdown-toggle" type="button">

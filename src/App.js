@@ -12,6 +12,8 @@ const App = () => {
     const [listings, setListings] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
     const [cityNeighborhood, setCityNeighborhood] = useState('');
+    const [minRent, setMinRent] = useState(0); // Default minimum rent
+    const [maxRent, setMaxRent] = useState(10000); // Default maximum rent
 
     const handleSelectTag = (tag) => {
       // Check if the tag is in the cities list or matches the pattern "Neighborhood (City)"
@@ -116,6 +118,10 @@ const App = () => {
                     onRemoveTag={handleRemoveTag}
                     toggleView={toggleMobileView}
                     isMapView={isMobileMapView}
+                    minRent={minRent}
+                    maxRent={maxRent}
+                    onMinRentChange={setMinRent}
+                    onMaxRentChange={setMaxRent}
                 />
             </div>
             <div className="desktop-view">
