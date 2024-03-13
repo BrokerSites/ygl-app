@@ -1,27 +1,33 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Autocomplete from './Autocomplete';
 import TagBox from './TagBox'; // Import TagBox component
-import Slider from  '@mui/material/Slider';
+import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box'
 
-const SearchBar = ({ 
-    cities, 
-    onSelectTag, 
-    selectedTags, 
-    onRemoveTag, 
-    toggleView, 
+const SearchBar = ({
+    cities,
+    onSelectTag,
+    selectedTags,
+    onRemoveTag,
+    toggleView,
     isMapView,
     minRent,
     maxRent,
     onMinRentChange,
-    onMaxRentChange, }) => {
-        
-        const [searchText, setSearchText] = useState('');
-        const [showPriceInput, setShowPriceInput] = useState(false);
-        const [rentValues, setRentValues] = useState([minRent, maxRent]);
-        const priceButtonRef = useRef(null); // Create a ref for the price button
-        const [priceInputPosition, setPriceInputPosition] = useState();
-        const overlayRef = useRef(null);
+    onMaxRentChange,
+}) => {
+
+    const [searchText, setSearchText] = useState('');
+    const [modalState, setModalState] = useState({
+        showPriceInput: false,
+        showBedBathInput: false
+    });
+    const [rentValues, setRentValues] = useState([minRent, maxRent]);
+    const [bedsBaths, setBedsBaths] = useState({ beds: 1, baths: 1 });
+
+    const priceButtonRef = useRef(null);
+    const bedBathButtonRef = useRef(null);
+    const modalRefs = useRef({});
 
     // Handle the form submission
     const handleSubmit = (event) => {
@@ -35,40 +41,35 @@ const SearchBar = ({
         onMinRentChange(newValue[0]);
         onMaxRentChange(newValue[1]);
         console.log(`Min Rent: ${newValue[0]}, Max Rent: ${newValue[1]}`); // Logging the range values
-      };
-
-      const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        let newValues = [...rentValues];
-        if (name === 'minRent') {
-          newValues[0] = Number(value);
-          onMinRentChange(Number(value));
-        } else if (name === 'maxRent') {
-          newValues[1] = Number(value);
-          onMaxRentChange(Number(value));
-        }
-        setRentValues(newValues);
-      };
-
-      const handlePriceButtonClick = () => {
-        if (!showPriceInput) {
-            const buttonRect = priceButtonRef.current.getBoundingClientRect();
-            setPriceInputPosition({
-                top: buttonRect.bottom,
-                left: buttonRect.left
-            });
-        }
-        setShowPriceInput(!showPriceInput);
     };
 
-    const toggleOverlay = () => setShowPriceInput(!showPriceInput);
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        if (name === 'minRent' || name === 'maxRent') {
+            const index = name === 'minRent' ? 0 : 1;
+            const updatedRentValues = [...rentValues];
+            updatedRentValues[index] = Number(value);
+            setRentValues(updatedRentValues);
+    
+            if (name === 'minRent') onMinRentChange(Number(value));
+            if (name === 'maxRent') onMaxRentChange(Number(value));
+        } else if (name === 'beds' || name === 'baths') {
+            setBedsBaths(prevValues => ({ ...prevValues, [name]: Number(value) }));
+        }
+    };
+
+    const toggleModal = (modalName) => {
+        setModalState(prevState => ({ ...prevState, [modalName]: !prevState[modalName] }));
+    };
+
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (overlayRef.current && !overlayRef.current.contains(event.target)) {
-                setShowPriceInput(false);
-                // Add similar lines for other overlays
-            }
+            Object.entries(modalRefs.current).forEach(([key, ref]) => {
+                if (ref && !ref.contains(event.target)) {
+                    setModalState(prevState => ({ ...prevState, [key]: false }));
+                }
+            });
         };
 
         document.addEventListener('mousedown', handleClickOutside);
@@ -91,51 +92,46 @@ const SearchBar = ({
                     </form>
                 </div>
                 <div className="col-auto price-btn">
-                <button
-                    ref={priceButtonRef} // Attach the ref to the button
-                    className="btn btn-primary dropdown-toggle"
-                    onClick={handlePriceButtonClick}
-                >
-                    Price
-                </button>
-                    {showPriceInput && (
-                    <Box ref={overlayRef} className="price-input-overlay">
-                    <Slider
-                      value={rentValues}
-                      onChange={handleRentRangeChange}
-                      valueLabelDisplay="auto"
-                      defaultValue={2000}
-                      shiftStep={2000}
-                      min={0}
-                      max={10000}
-                      step={100}
-                    />
-                    <div className='option-input-div'>
-
-                    <input className='option-input'
-                      type="number"
-                      name="minRent"
-                      value={rentValues[0]}
-                      onChange={handleInputChange}
-                    />
-                    <input className='option-input'
-                      type="number"
-                      name="maxRent"
-                      value={rentValues[1]}
-                      onChange={handleInputChange}
-                    />
-
-                    </div>
-
-                  </Box>
-                    
-                )}
+                    <button
+                        ref={priceButtonRef} // Attach the ref to the button
+                        className="btn btn-primary dropdown-toggle"
+                        onClick={() => toggleModal('showPriceInput')}
+                    >
+                        Price
+                    </button>
+                    {modalState.showPriceInput && (
+                        <Box ref={el => modalRefs.current['showPriceInput'] = el} className="input-overlay">
+                            <Slider
+                                value={rentValues}
+                                onChange={handleRentRangeChange}
+                                valueLabelDisplay="auto"
+                                min={0}
+                                max={10000}
+                                step={100}
+                            />
+                            <div className='option-input-div'>
+                                <input className='option-input' type="number" name="minRent" value={rentValues[0]} onChange={handleInputChange} />
+                                <input className='option-input' type="number" name="maxRent" value={rentValues[1]} onChange={handleInputChange} />
+                            </div>
+                        </Box>
+                    )}
                 </div>
                 <div className="col-auto bb-btn">
-                    <button className="btn btn-primary dropdown-toggle" type="button">
+                    <button
+                        ref={bedBathButtonRef}  // Attach the ref to the Beds + Baths button
+                        className="btn btn-primary dropdown-toggle"
+                        onClick={() => toggleModal('showBedBathInput')}
+                    >
                         Beds + Baths
                     </button>
-                    {/* Dropdown Menu */}
+                    {modalState.showBedBathInput && (
+                        <Box ref={el => modalRefs.current['showBedBathInput'] = el} className="input-overlay">
+                            <div className="option-input-div">
+                                <input className="option-input" type="number" name="beds" value={bedsBaths.beds} onChange={handleInputChange} placeholder="Beds" />
+                                <input className="option-input" type="number" name="baths" value={bedsBaths.baths} onChange={handleInputChange} placeholder="Baths" />
+                            </div>
+                        </Box>
+                    )}
                 </div>
                 <div className="col-auto md-btn">
                     <button className="btn btn-primary dropdown-toggle" type="button">
