@@ -23,7 +23,10 @@ const SearchBar = ({
         showBedBathInput: false
     });
     const [rentValues, setRentValues] = useState([minRent, maxRent]);
-    const [bedsBaths, setBedsBaths] = useState({ beds: 1, baths: 1 });
+    const [bedsBaths, setBedsBaths] = useState({
+        beds: [0, 5], // Assuming 1-5 range for beds
+        baths: [1, 5], // Assuming 1-5 range for baths
+      });
 
     const priceButtonRef = useRef(null);
     const bedBathButtonRef = useRef(null);
@@ -57,6 +60,20 @@ const SearchBar = ({
             setBedsBaths(prevValues => ({ ...prevValues, [name]: Number(value) }));
         }
     };
+
+    const handleBedsChange = (event, newValue) => {
+        setBedsBaths(prevValues => ({
+          ...prevValues,
+          beds: newValue,
+        }));
+      };
+      
+      const handleBathsChange = (event, newValue) => {
+        setBedsBaths(prevValues => ({
+          ...prevValues,
+          baths: newValue,
+        }));
+      };
 
     const toggleModal = (modalName) => {
         setModalState(prevState => ({ ...prevState, [modalName]: !prevState[modalName] }));
@@ -126,9 +143,74 @@ const SearchBar = ({
                     </button>
                     {modalState.showBedBathInput && (
                         <Box ref={el => modalRefs.current['showBedBathInput'] = el} className="input-overlay">
-                            <div className="option-input-div">
-                                <input className="option-input" type="number" name="beds" value={bedsBaths.beds} onChange={handleInputChange} placeholder="Beds" />
-                                <input className="option-input" type="number" name="baths" value={bedsBaths.baths} onChange={handleInputChange} placeholder="Baths" />
+                            <div className="slider-container">
+                            <div className="slider-label">BEDS</div>
+                            <Slider
+                                value={typeof bedsBaths.beds === 'number' ? [bedsBaths.beds] : bedsBaths.beds}
+                                onChange={handleBedsChange}
+                                valueLabelDisplay="auto"
+                                min={0}
+                                max={5}
+                                step={1}
+                                valueLabelFormat={(value) => {
+                                    if (value === 0) {
+                                        return 'Studio';
+                                    }
+                                    return value === 5 ? '5+' : value;
+                                }}
+                                marks={[
+                                    { value: 0, label: 'Studio' },
+                                    { value: 5, label: '5+' }
+                                ]}
+                            />
+                            <div className="input-container">
+                                <input
+                                className="option-input"
+                                type="number"
+                                name="minBeds"
+                                value={bedsBaths.beds[0]}
+                                onChange={handleInputChange}
+                                />
+                                <input
+                                className="option-input"
+                                type="number"
+                                name="maxBeds"
+                                value={bedsBaths.beds[1]}
+                                onChange={handleInputChange}
+                                />
+                            </div>
+                            </div>
+                            <div className="slider-container">
+                            <div className="slider-label">BATHS</div>
+                            <Slider
+                                value={typeof bedsBaths.baths === 'number' ? [bedsBaths.baths] : bedsBaths.baths}
+                                onChange={handleBathsChange}
+                                valueLabelDisplay="auto"
+                                min={1}
+                                max={5}
+                                step={1}
+                                valueLabelFormat={(value) => value === 5 ? '5+' : value}
+                                marks={[
+                                    { value: 1, label: '1' },
+                                    { value: 5, label: '5+' }
+                                ]}
+                            />
+                            <div className="input-container">
+                                <input
+                                className="option-input"
+                                type="number"
+                                name="minBaths"
+                                value={bedsBaths.baths[0]}
+                                onChange={handleInputChange}
+                                />
+                                <input
+                                className="option-input"
+                                type="number"
+                                name="maxBaths"
+                                value={bedsBaths.baths[1]}
+                                onChange={handleInputChange}
+                                />
+                            </div>
                             </div>
                         </Box>
                     )}
