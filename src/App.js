@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ListingsContainer from './components/ListingsContainer';
@@ -14,6 +14,11 @@ const App = () => {
     const [cityNeighborhood, setCityNeighborhood] = useState('');
     const [minRent, setMinRent] = useState(0); // Default minimum rent
     const [maxRent, setMaxRent] = useState(10000); // Default maximum rent
+    const overlayRef = useRef(null);
+    
+    const closeOverlays = () => {
+    // Logic to close autocomplete and price input overlays
+    };
 
     const handleSelectTag = (tag) => {
       // Check if the tag is in the cities list or matches the pattern "Neighborhood (City)"
@@ -96,6 +101,19 @@ const App = () => {
         }).join(',');
         setCityNeighborhood(formatted);
     }, [selectedTags]);
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+          if (overlayRef.current && !overlayRef.current.contains(event.target)) {
+            closeOverlays();
+          }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
 
     //Organize the variables we will send to the API here, then put them under a greater variable. 
