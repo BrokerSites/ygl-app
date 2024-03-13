@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Autocomplete from './Autocomplete';
-import TagBox from './TagBox'; // Import TagBox component
+import TagBox from './TagBox';
 import Slider from '@mui/material/Slider';
-import Box from '@mui/material/Box'
+import Box from '@mui/material/Box';
 
 const SearchBar = ({
     cities,
@@ -16,82 +16,118 @@ const SearchBar = ({
     onMinRentChange,
     onMaxRentChange,
 }) => {
-
     const [searchText, setSearchText] = useState('');
     const [modalState, setModalState] = useState({
         showPriceInput: false,
-        showBedBathInput: false
+        showBedBathInput: false,
     });
     const [rentValues, setRentValues] = useState([minRent, maxRent]);
-    const [bedsBaths, setBedsBaths] = useState({
-        beds: [0, 5], // Assuming 1-5 range for beds
-        baths: [1, 5], // Assuming 1-5 range for baths
-      });
+    const [bedsBaths, setBedsBaths] = useState({ beds: [0, 5], baths: [1, 5] });
 
     const priceButtonRef = useRef(null);
     const bedBathButtonRef = useRef(null);
     const modalRefs = useRef({});
 
-    // Handle the form submission
     const handleSubmit = (event) => {
         event.preventDefault();
         onSelectTag(searchText);
-        setSearchText(''); // Clear search text after selecting
+        setSearchText('');
     };
 
     const handleRentRangeChange = (event, newValue) => {
         setRentValues(newValue);
         onMinRentChange(newValue[0]);
         onMaxRentChange(newValue[1]);
-        console.log(`Min Rent: ${newValue[0]}, Max Rent: ${newValue[1]}`); // Logging the range values
     };
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        if (name === 'minRent' || name === 'maxRent') {
-            const index = name === 'minRent' ? 0 : 1;
-            const updatedRentValues = [...rentValues];
-            updatedRentValues[index] = Number(value);
-            setRentValues(updatedRentValues);
-    
-            if (name === 'minRent') onMinRentChange(Number(value));
-            if (name === 'maxRent') onMaxRentChange(Number(value));
-        } else if (name === 'beds' || name === 'baths') {
-            setBedsBaths(prevValues => ({ ...prevValues, [name]: Number(value) }));
+    const formatValue = (value, name) => {
+        if (name === 'beds') {
+            return value === 0 ? 'Studio' : value === 5 ? '5+' : value;
+        } else if (name === 'baths') {
+            return value === 5 ? '5+' : value;
         }
+        return value;
     };
+
+    const parseValue = (value, name) => {
+        if (name === 'beds') {
+            return value === 'Studio' ? 0 : value === '5+' ? 5 : value;
+        } else if (name === 'baths') {
+            return value === '5+' ? 5 : value;
+        }
+        return value;
+    };
+
+    const formatBeds = (value) => {
+        return value === 0 ? 'Studio' : value === 5 ? '5+' : value.toString();
+      };
+    
+      const formatBaths = (value) => {
+        return value === 5 ? '5+' : value.toString();
+      };
+
+      const handleInputChange = (event) => {
+        const { name, value } = event.target;
+    
+        if (name === 'minRent' || name === 'maxRent') {
+          const index = name === 'minRent' ? 0 : 1;
+          const updatedRentValues = [...rentValues];
+          updatedRentValues[index] = Number(value);
+          setRentValues(updatedRentValues);
+    
+          if (name === 'minRent') onMinRentChange(Number(value));
+          if (name === 'maxRent') onMaxRentChange(Number(value));
+        } else if (name.startsWith('beds') || name.startsWith('baths')) {
+          const [key, bound] = name.split('-');
+          const index = bound === 'min' ? 0 : 1;
+          const newValue = value === 'Studio' ? 0 : value === '5+' ? 5 : Number(value);
+    
+          setBedsBaths((prevValues) => ({
+            ...prevValues,
+            [key]: [
+              index === 0 ? newValue : prevValues[key][0],
+              index === 1 ? newValue : prevValues[key][1],
+            ],
+          }));
+        }
+      };
 
     const handleBedsChange = (event, newValue) => {
         setBedsBaths(prevValues => ({
-          ...prevValues,
-          beds: newValue,
+            ...prevValues,
+            beds: newValue,
         }));
-      };
+    };
       
-      const handleBathsChange = (event, newValue) => {
+    const handleBathsChange = (event, newValue) => {
         setBedsBaths(prevValues => ({
-          ...prevValues,
-          baths: newValue,
+            ...prevValues,
+            baths: newValue,
         }));
-      };
-
-    const toggleModal = (modalName) => {
-        setModalState(prevState => ({ ...prevState, [modalName]: !prevState[modalName] }));
     };
 
+    const toggleModal = (modalName) => {
+        setModalState(prevState => ({
+            ...prevState,
+            [modalName]: !prevState[modalName],
+        }));
+    };
 
     useEffect(() => {
         const handleClickOutside = (event) => {
             Object.entries(modalRefs.current).forEach(([key, ref]) => {
                 if (ref && !ref.contains(event.target)) {
-                    setModalState(prevState => ({ ...prevState, [key]: false }));
+                    setModalState(prevState => ({
+                        ...prevState,
+                        [key]: false,
+                    }));
                 }
             });
         };
 
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
 
@@ -142,77 +178,71 @@ const SearchBar = ({
                         Beds + Baths
                     </button>
                     {modalState.showBedBathInput && (
-                        <Box ref={el => modalRefs.current['showBedBathInput'] = el} className="input-overlay">
-                            <div className="slider-container">
-                            <div className="slider-label">BEDS</div>
-                            <Slider
-                                value={typeof bedsBaths.beds === 'number' ? [bedsBaths.beds] : bedsBaths.beds}
-                                onChange={handleBedsChange}
-                                valueLabelDisplay="auto"
-                                min={0}
-                                max={5}
-                                step={1}
-                                valueLabelFormat={(value) => {
-                                    if (value === 0) {
-                                        return 'Studio';
-                                    }
-                                    return value === 5 ? '5+' : value;
-                                }}
-                                marks={[
-                                    { value: 0, label: 'Studio' },
-                                    { value: 5, label: '5+' }
-                                ]}
-                            />
-                            <div className="input-container">
-                                <input
-                                className="option-input"
-                                type="number"
-                                name="minBeds"
-                                value={bedsBaths.beds[0]}
-                                onChange={handleInputChange}
-                                />
-                                <input
-                                className="option-input"
-                                type="number"
-                                name="maxBeds"
-                                value={bedsBaths.beds[1]}
-                                onChange={handleInputChange}
-                                />
-                            </div>
-                            </div>
-                            <div className="slider-container">
-                            <div className="slider-label">BATHS</div>
-                            <Slider
-                                value={typeof bedsBaths.baths === 'number' ? [bedsBaths.baths] : bedsBaths.baths}
-                                onChange={handleBathsChange}
-                                valueLabelDisplay="auto"
-                                min={1}
-                                max={5}
-                                step={1}
-                                valueLabelFormat={(value) => value === 5 ? '5+' : value}
-                                marks={[
-                                    { value: 1, label: '1' },
-                                    { value: 5, label: '5+' }
-                                ]}
-                            />
-                            <div className="input-container">
-                                <input
-                                className="option-input"
-                                type="number"
-                                name="minBaths"
-                                value={bedsBaths.baths[0]}
-                                onChange={handleInputChange}
-                                />
-                                <input
-                                className="option-input"
-                                type="number"
-                                name="maxBaths"
-                                value={bedsBaths.baths[1]}
-                                onChange={handleInputChange}
-                                />
-                            </div>
-                            </div>
-                        </Box>
+        <Box ref={(el) => (modalRefs.current['showBedBathInput'] = el)} className="input-overlay">
+        {/* BEDS slider and inputs */}
+        <div className="slider-container">
+          <div className="slider-label">BEDS</div>
+          <Slider
+            value={bedsBaths.beds}
+            onChange={handleBedsChange}
+            valueLabelDisplay="auto"
+            min={0}
+            max={5}
+            step={1}
+            marks={[
+              { value: 0, label: 'Studio' },
+              { value: 5, label: '5+' },
+            ]}
+          />
+          <div className="input-container">
+            <input
+              className="option-input"
+              type="text"
+              name="beds-min"
+              value={formatBeds(bedsBaths.beds[0])}
+              onChange={handleInputChange}
+            />
+            <input
+              className="option-input"
+              type="text"
+              name="beds-max"
+              value={formatBeds(bedsBaths.beds[1])}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
+        {/* BATHS slider and inputs */}
+        <div className="slider-container">
+          <div className="slider-label">BATHS</div>
+          <Slider
+            value={bedsBaths.baths}
+            onChange={handleBathsChange}
+            valueLabelDisplay="auto"
+            min={1}
+            max={5}
+            step={1}
+            marks={[
+              { value: 5, label: '5+' },
+            ]}
+          />
+          <div className="input-container">
+            <input
+              className="option-input"
+              type="text"
+              name="baths-min"
+              value={formatBaths(bedsBaths.baths[0])}
+              onChange={handleInputChange}
+            />
+            <input
+              className="option-input"
+              type="text"
+              name="baths-max"
+              value={formatBaths(bedsBaths.baths[1])}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
+      </Box>
                     )}
                 </div>
                 <div className="col-auto md-btn">
