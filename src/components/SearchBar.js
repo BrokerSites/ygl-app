@@ -225,6 +225,7 @@ const SearchBar = ({
                   <div className="slider-label">BATHS</div>
                   <Slider
                     value={bedsBaths.baths}
+                    valueLabelFormat={formatBaths}  // Use the custom label formatting function
                     onChange={handleBathsChange}
                     valueLabelDisplay="auto"
                     min={1}
