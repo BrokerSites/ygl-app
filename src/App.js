@@ -14,6 +14,7 @@ const App = () => {
     const [cityNeighborhood, setCityNeighborhood] = useState('');
     const [minRent, setMinRent] = useState(0); // Default minimum rent
     const [maxRent, setMaxRent] = useState(10000); // Default maximum rent
+    
 
     const handleSelectTag = (tag) => {
       // Check if the tag is in the cities list or matches the pattern "Neighborhood (City)"
@@ -21,7 +22,7 @@ const App = () => {
       if (isValidTag && !selectedTags.includes(tag)) {
           setSelectedTags([...selectedTags, tag]);
       }
-  };
+    };
   
 
     const handleRemoveTag = (tagToRemove) => {

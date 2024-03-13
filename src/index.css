@@ -308,3 +308,25 @@ code {
   color: white;
 }
 
+.option-input-div{
+  display: flex;
+  gap: 10vw;
+}
+
+.option-input{
+  width: 5em;
+}
+
+.price-input-overlay {
+  position: absolute;
+  margin-top: 1rem;
+  background: white;
+  padding: 2em 1em 1em 1em;
+  z-index: 3000;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: auto;
+  max-width: 30%; /* Adjust this percentage based on your layout */
+  overflow: hidden;
+  transform: translateX(-78%); /* Align the box as needed */
+}

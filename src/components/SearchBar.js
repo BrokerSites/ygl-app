@@ -1,4 +1,4 @@
-import React, { useState, } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Autocomplete from './Autocomplete';
 import TagBox from './TagBox'; // Import TagBox component
 import Slider from  '@mui/material/Slider';
@@ -16,9 +16,11 @@ const SearchBar = ({
     onMinRentChange,
     onMaxRentChange, }) => {
         
-    const [searchText, setSearchText] = useState('');
-    const [showRentRange, setShowRentRange] = useState(false);
-    const [rentValues, setRentValues] = useState([minRent, maxRent]);
+        const [searchText, setSearchText] = useState('');
+        const [showPriceInput, setShowPriceInput] = useState(false);
+        const [rentValues, setRentValues] = useState([minRent, maxRent]);
+        const priceButtonRef = useRef(null); // Create a ref for the price button
+        const [priceInputPosition, setPriceInputPosition] = useState();
 
     // Handle the form submission
     const handleSubmit = (event) => {
@@ -47,6 +49,17 @@ const SearchBar = ({
         setRentValues(newValues);
       };
 
+      const handlePriceButtonClick = () => {
+        if (!showPriceInput) {
+            const buttonRect = priceButtonRef.current.getBoundingClientRect();
+            setPriceInputPosition({
+                top: buttonRect.bottom,
+                left: buttonRect.left
+            });
+        }
+        setShowPriceInput(!showPriceInput);
+    };
+
     return (
         <div className="search-bar">
             <div className="row  first-row">
@@ -62,33 +75,41 @@ const SearchBar = ({
                 </div>
                 <div className="col-auto price-btn">
                 <button
+                    ref={priceButtonRef} // Attach the ref to the button
                     className="btn btn-primary dropdown-toggle"
-                    onClick={() => setShowRentRange(!showRentRange)}
+                    onClick={handlePriceButtonClick}
                 >
                     Price
                 </button>
-                    {showRentRange && (
-                    
-                    <Box>
+                    {showPriceInput && (
+                    <Box className="price-input-overlay">
                     <Slider
                       value={rentValues}
                       onChange={handleRentRangeChange}
                       valueLabelDisplay="auto"
+                      defaultValue={2000}
+                      shiftStep={2000}
                       min={0}
                       max={10000}
+                      step={100}
                     />
-                    <input
+                    <div className='option-input-div'>
+
+                    <input className='option-input'
                       type="number"
                       name="minRent"
                       value={rentValues[0]}
                       onChange={handleInputChange}
                     />
-                    <input
+                    <input className='option-input'
                       type="number"
                       name="maxRent"
                       value={rentValues[1]}
                       onChange={handleInputChange}
                     />
+
+                    </div>
+
                   </Box>
                     
                 )}
