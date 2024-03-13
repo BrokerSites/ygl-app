@@ -21,6 +21,7 @@ const SearchBar = ({
         const [rentValues, setRentValues] = useState([minRent, maxRent]);
         const priceButtonRef = useRef(null); // Create a ref for the price button
         const [priceInputPosition, setPriceInputPosition] = useState();
+        const overlayRef = useRef(null);
 
     // Handle the form submission
     const handleSubmit = (event) => {
@@ -60,6 +61,22 @@ const SearchBar = ({
         setShowPriceInput(!showPriceInput);
     };
 
+    const toggleOverlay = () => setShowPriceInput(!showPriceInput);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (overlayRef.current && !overlayRef.current.contains(event.target)) {
+                setShowPriceInput(false);
+                // Add similar lines for other overlays
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
         <div className="search-bar">
             <div className="row  first-row">
@@ -82,7 +99,7 @@ const SearchBar = ({
                     Price
                 </button>
                     {showPriceInput && (
-                    <Box className="price-input-overlay">
+                    <Box ref={overlayRef} className="price-input-overlay">
                     <Slider
                       value={rentValues}
                       onChange={handleRentRangeChange}
