@@ -159,6 +159,7 @@ code {
 
 .row {
   --bs-gutter-x: .75rem;
+  gap: .5em;
 }
 
 
@@ -357,13 +358,19 @@ code {
   border-radius: 4px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  transform: translateX(-50%); /* Align the box as needed */
+  transform: translateX(-53%); /* Align the box as needed */
   display: flex;
   flex-direction: column;
   gap: 2.5em;
+  width: fit-content;
 }
 
 
 .mi-select{
 min-width: 150px;
 }
+
+.p-btn, .bb-btn, .mi-btn{
+width: fit-content;
+}
+

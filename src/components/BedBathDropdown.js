@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Box, Slider } from '@mui/material';
 
-const BedBathDropdown = ({ bedsBaths, onBedsBathsChange, isOpen, onToggle }) => {
-    const bedBathButtonRef = useRef(null);
+const BedBathDropdown = ({ bedsBaths, onBedsBathsChange, isOpen, onToggle, buttonRef }) => {
+
+    const [dropdownStyle, setDropdownStyle] = useState({});
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -31,17 +32,22 @@ const BedBathDropdown = ({ bedsBaths, onBedsBathsChange, isOpen, onToggle }) => 
         return value >= 5 ? '5+' : value.toString(); // Assuming same logic for baths
     };
 
+    useEffect(() => {
+        if (buttonRef.current && isOpen) {
+            const rect = buttonRef.current.getBoundingClientRect();
+            setDropdownStyle({
+                top: `${rect.bottom + window.scrollY}px`,
+                left: `${rect.left + window.scrollX}px`,
+                position: 'absolute',
+                zIndex: 1000 // Ensure it's on top of other elements
+            });
+        }
+    }, [buttonRef, isOpen]);
+
+    if (!isOpen) return null;
+
     return (
-        <div className="col-auto bb-btn">
-            <button
-                ref={bedBathButtonRef}
-                className="btn btn-primary dropdown-toggle"
-                onClick={onToggle}
-            >
-                Beds + Baths
-            </button>
-            {isOpen && (
-                <Box className="bb-input-overlay">
+                <Box className="bb-input-overlay" style={dropdownStyle}>
                     <div className="slider-container">
                         <div className="slider-label">BEDS</div>
                         <Slider
@@ -111,8 +117,6 @@ const BedBathDropdown = ({ bedsBaths, onBedsBathsChange, isOpen, onToggle }) => 
                         </div>
                     </div>
                 </Box>
-            )}
-        </div>
     );
 };
 

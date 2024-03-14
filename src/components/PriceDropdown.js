@@ -1,11 +1,9 @@
-// PriceDropdown.js
-import React, { useRef } from 'react';
+import React, {useEffect, useState } from 'react';
 import { Box, Slider } from '@mui/material';
 
-const PriceDropdown = ({ minRent, maxRent, onRentChange }) => {
-    const priceButtonRef = useRef(null);
-    const [isOpen, setIsOpen] = React.useState(false);
-    const toggleDropdown = () => setIsOpen(!isOpen);
+const PriceDropdown = ({ minRent, maxRent, onRentChange, isOpen, buttonRef }) => {
+
+    const [dropdownStyle, setDropdownStyle] = useState({});
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -17,44 +15,46 @@ const PriceDropdown = ({ minRent, maxRent, onRentChange }) => {
         }
     };
 
+    useEffect(() => {
+        if (buttonRef.current && isOpen) {
+            const rect = buttonRef.current.getBoundingClientRect();
+            setDropdownStyle({
+                top: `${rect.bottom + window.scrollY}px`, // Y position
+                left: `${rect.left + window.scrollX}px`, // X position
+                position: 'absolute'
+            });
+        }
+    }, [buttonRef, isOpen]);
+
+    if (!isOpen) return null;
+
     return (
-        <div className="col-auto price-btn">
-            <button
-                ref={priceButtonRef}
-                className="btn btn-primary dropdown-toggle"
-                onClick={toggleDropdown}
-            >
-                Price
-            </button>
-            {isOpen && (
-                <Box className="input-overlay">
-                    <Slider
-                        value={[minRent, maxRent]}
-                        onChange={(event, newValue) => onRentChange(newValue)}
-                        valueLabelDisplay="auto"
-                        min={0}
-                        max={10000}
-                        step={100}
-                    />
-                    <div className='option-input-div'>
-                        <input
-                            className='option-input'
-                            type="number"
-                            name="minRent"
-                            value={minRent}
-                            onChange={handleInputChange}
-                        />
-                        <input
-                            className='option-input'
-                            type="number"
-                            name="maxRent"
-                            value={maxRent}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                </Box>
-            )}
-        </div>
+        <Box className="input-overlay" style={dropdownStyle} >
+            <Slider
+                value={[minRent, maxRent]}
+                onChange={(event, newValue) => onRentChange(newValue)}
+                valueLabelDisplay="auto"
+                min={0}
+                max={10000}
+                step={100}
+            />
+            <div className='option-input-div'>
+                <input
+                    className='option-input'
+                    type="number"
+                    name="minRent"
+                    value={minRent}
+                    onChange={handleInputChange}
+                />
+                <input
+                    className='option-input'
+                    type="number"
+                    name="maxRent"
+                    value={maxRent}
+                    onChange={handleInputChange}
+                />
+            </div>
+        </Box>
     );
 };
 
