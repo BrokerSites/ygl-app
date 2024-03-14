@@ -139,7 +139,7 @@ code {
 
   .bb-btn,
   .bb-btn,
-  .md-btn,
+  .mi-btn,
   .price-btn {
     display: none;
   }
@@ -346,4 +346,24 @@ code {
   display: flex;
   flex-direction: column;
   gap: 2.5em;
+}
+
+.mi-input-overlay {
+  position: absolute;
+  margin-top: 1rem;
+  background: white;
+  padding: 2em;
+  z-index: 3000;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transform: translateX(-50%); /* Align the box as needed */
+  display: flex;
+  flex-direction: column;
+  gap: 2.5em;
+}
+
+
+.mi-select{
+min-width: 150px;
 }

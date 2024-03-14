@@ -3,7 +3,7 @@ import PriceDropdown from './PriceDropdown';
 import Autocomplete from './Autocomplete';
 import TagBox from './TagBox';
 import BedBathDropdown from './BedBathDropdown';
-
+import MoveIn from './MoveIn';
 
 const SearchBar = ({
     cities,
@@ -21,6 +21,7 @@ const SearchBar = ({
     const [modalState, setModalState] = useState({
         showPriceInput: false,
         showBedBathInput: false,
+        showMoveInInput: false, // New state for MoveIn
     });
     const [rentValues, setRentValues] = useState([minRent, maxRent]);
     const [bedsBaths, setBedsBaths] = useState({ beds: [0, 5], baths: [1, 5] });
@@ -34,18 +35,6 @@ const SearchBar = ({
         setSearchText('');
     };
 
-
-    const parseValue = (value, name) => {
-      if (value === '') {
-          return value;  // Return the empty string without conversion
-      }
-      if (name === 'beds') {
-          return value === 'Studio' ? 0 : value === '5+' ? 5 : parseInt(value, 10);
-      } else if (name === 'baths') {
-          return value === '5+' ? 5 : parseInt(value, 10);
-      }
-      return parseInt(value, 10);
-  };
 
     const formatBeds = (value) => {
       if (value === '') return '';
@@ -115,12 +104,10 @@ const SearchBar = ({
                   formatBeds={formatBeds}
                   formatBaths={formatBaths}
                 />
-                <div className="col-auto md-btn">
-                    <button className="btn btn-primary dropdown-toggle" type="button">
-                        Move-In Date
-                    </button>
-                    {/* Dropdown Menu */}
-                </div>
+              <MoveIn
+                isOpen={modalState.showMoveInInput}
+                onToggle={() => toggleModal('showMoveInInput')}
+              />
                 <div className="col-auto">
                     <button className="btn btn-primary" type="button">
                         All Filters
