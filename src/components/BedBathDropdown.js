@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Box, Slider } from '@mui/material';
 
-const BedBathDropdown = ({ bedsBaths, onBedsBathsChange, isOpen, onToggle, buttonRef }) => {
-
+const BedBathDropdown = ({ bedsBaths, onBedsBathsChange, isOpen, onToggle, buttonRef, setRef }) => {
+    const dropdownRef = useRef(null); // Ref for the dropdown itself
     const [dropdownStyle, setDropdownStyle] = useState({});
 
     const handleInputChange = (event) => {
@@ -33,21 +33,24 @@ const BedBathDropdown = ({ bedsBaths, onBedsBathsChange, isOpen, onToggle, butto
     };
 
     useEffect(() => {
-        if (buttonRef.current && isOpen) {
-            const rect = buttonRef.current.getBoundingClientRect();
+        if (isOpen) {
+            setRef(dropdownRef.current);
+            const buttonRect = buttonRef.current.getBoundingClientRect();
+            const dropdownWidth = dropdownRef.current.offsetWidth;
             setDropdownStyle({
-                top: `${rect.bottom + window.scrollY}px`,
-                left: `${rect.left + window.scrollX}px`,
-                position: 'absolute',
-                zIndex: 1000 // Ensure it's on top of other elements
+                display: 'block', // Make sure the dropdown is visible when it's open
+                top: `${buttonRect.bottom + window.scrollY}px`, // Position below the button
+                // Subtract the dropdown width from the button's right edge position to align their right edges
+                left: `${buttonRect.right - dropdownWidth + window.scrollX}px`,
+                position: 'absolute'
             });
         }
-    }, [buttonRef, isOpen]);
+    }, [isOpen, buttonRef, setRef, dropdownRef]);
 
     if (!isOpen) return null;
 
     return (
-                <Box className="bb-input-overlay" style={dropdownStyle}>
+                <Box className="bb-input-overlay" ref={dropdownRef} style={dropdownStyle} onClick={(e) => e.stopPropagation()}>
                     <div className="slider-container">
                         <div className="slider-label">BEDS</div>
                         <Slider

@@ -66,21 +66,31 @@ const SearchBar = ({
 
 useEffect(() => {
     const handleClickOutside = (event) => {
-        // Check if the click is outside the modal's content
         if (modalRefs.current.length && modalRefs.current[0] && !modalRefs.current[0].contains(event.target)) {
             if (modalState.showPriceInput && !priceButtonRef.current.contains(event.target)) {
                 setModalState(prevState => ({ ...prevState, showPriceInput: false }));
             }
-            // Extend with other modals' conditions as needed
+            if (modalState.showBedBathInput && !bedBathButtonRef.current.contains(event.target)) {
+                setModalState(prevState => ({ ...prevState, showBedBathInput: false }));
+            }
+            if (modalState.showMoveInInput && !moveInButtonRef.current.contains(event.target)) {
+                setModalState(prevState => ({ ...prevState, showMoveInInput: false }));
+            }
         }
     };
 
-    if (modalState.showPriceInput) {
+    // We add the event listener if any modal is open
+    if (modalState.showPriceInput || modalState.showBedBathInput || modalState.showMoveInInput) {
         document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
     }
-}, [modalState.showPriceInput]);
 
+    // Cleanup the event listener when the component is unmounted or if all modals are closed
+    return () => {
+        if (!modalState.showPriceInput && !modalState.showBedBathInput && !modalState.showMoveInInput) {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+    };
+}, [modalState, priceButtonRef, bedBathButtonRef, moveInButtonRef]);
 
 
     return (
@@ -124,13 +134,14 @@ useEffect(() => {
           </button>
           {modalState.showBedBathInput && (
           <BedBathDropdown
+              setRef={setModalRef} // new prop to pass the ref setting function
               buttonRef={bedBathButtonRef} // Pass ref to BedBathDropdown
               bedsBaths={bedsBaths}
               onBedsBathsChange={setBedsBaths}
               isOpen={modalState.showBedBathInput}
               onToggle={() => toggleModal('showBedBathInput')}
               formatBeds={formatBeds}
-            formatBaths={formatBaths}
+              formatBaths={formatBaths}
           />
           )}
             <button
@@ -142,6 +153,7 @@ useEffect(() => {
             </button>
             {modalState.showMoveInInput && (
             <MoveIn
+                setRef={setModalRef} // new prop to pass the ref setting function
                 buttonRef={moveInButtonRef} // Pass ref to MoveIn
                 isOpen={modalState.showMoveInInput}
                 onToggle={() => toggleModal('showMoveInInput')}

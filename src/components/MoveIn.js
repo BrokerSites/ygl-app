@@ -1,8 +1,8 @@
 import { Box } from '@mui/material';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
-const MoveIn = ({ isOpen, buttonRef, onToggle }) => {
-    
+const MoveIn = ({ isOpen, buttonRef, onToggle, setRef }) => {
+    const dropdownRef = useRef(null); // Ref for the dropdown itself
     const [moveInOption, setMoveInOption] = useState('Anytime');
     const [selectedDate, setSelectedDate] = useState('');
     const [dropdownStyle, setDropdownStyle] = useState({});
@@ -23,19 +23,24 @@ const MoveIn = ({ isOpen, buttonRef, onToggle }) => {
 
 
     useEffect(() => {
-        if (buttonRef.current && isOpen) {
-            const rect = buttonRef.current.getBoundingClientRect();
+        if (isOpen) {
+            setRef(dropdownRef.current);
+            const buttonRect = buttonRef.current.getBoundingClientRect();
+            const dropdownWidth = dropdownRef.current.offsetWidth;
             setDropdownStyle({
-                top: `${rect.bottom + window.scrollY}px`,
-                left: `${rect.left + window.scrollX}px`,
-                position: 'absolute',
-                zIndex: 4000 // Ensure it's on top of other elements
+                display: 'block', // Make sure the dropdown is visible when it's open
+                top: `${buttonRect.bottom + window.scrollY}px`, // Position below the button
+                // Subtract the dropdown width from the button's right edge position to align their right edges
+                left: `${buttonRect.right - dropdownWidth + window.scrollX}px`,
+                position: 'absolute'
             });
         }
-    }, [buttonRef, isOpen]);
+    }, [isOpen, buttonRef, setRef, dropdownRef]);
+
+    if (!isOpen) return null;
 
     return (  
-        <Box className="mi-input-overlay" style={dropdownStyle}>
+        <Box className="mi-input-overlay" ref={dropdownRef} style={dropdownStyle} onClick={(e) => e.stopPropagation()}>
             <select 
                 value={moveInOption}
                 onChange={handleMoveInChange}

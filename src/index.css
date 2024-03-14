@@ -342,8 +342,7 @@ code {
   width: auto;
   max-width: 30%; /* Adjust this percentage based on your layout */
   overflow: hidden;
-  transform: translateX(-40%); /* Align the box as needed */
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   gap: 2.5em;
 }
@@ -357,8 +356,7 @@ code {
   border-radius: 4px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  transform: translateX(-53%); /* Align the box as needed */
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   gap: 2.5em;
   width: fit-content;
