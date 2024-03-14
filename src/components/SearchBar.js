@@ -29,7 +29,13 @@ const SearchBar = ({
     const bedBathButtonRef = useRef(null);
     const moveInButtonRef = useRef(null); // Add ref for Move-In button
 
-    const modalRefs = useRef({});
+    const modalRefs = useRef([]);
+    const setModalRef = (element) => {
+        // Make sure we are storing the element correctly and not overwriting with non-DOM values
+        if (element) {
+            modalRefs.current = [element]; // Should only hold one element for the current modal, adjust if managing multiple modals
+        }
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -49,30 +55,33 @@ const SearchBar = ({
   };
 
 
-    const toggleModal = (modalName) => {
-        setModalState(prevState => ({
-            ...prevState,
-            [modalName]: !prevState[modalName],
-        }));
+  const toggleModal = (modalName) => {
+    setModalState(prevState => ({
+        ...prevState,
+        [modalName]: !prevState[modalName],
+    }));
+};
+
+
+
+useEffect(() => {
+    const handleClickOutside = (event) => {
+        // Check if the click is outside the modal's content
+        if (modalRefs.current.length && modalRefs.current[0] && !modalRefs.current[0].contains(event.target)) {
+            if (modalState.showPriceInput && !priceButtonRef.current.contains(event.target)) {
+                setModalState(prevState => ({ ...prevState, showPriceInput: false }));
+            }
+            // Extend with other modals' conditions as needed
+        }
     };
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            Object.entries(modalRefs.current).forEach(([key, ref]) => {
-                if (ref && !ref.contains(event.target)) {
-                    setModalState(prevState => ({
-                        ...prevState,
-                        [key]: false,
-                    }));
-                }
-            });
-        };
-
+    if (modalState.showPriceInput) {
         document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+}, [modalState.showPriceInput]);
+
+
 
     return (
       <div className="search-bar">
@@ -95,6 +104,7 @@ const SearchBar = ({
               Price
           </button>
           <PriceDropdown
+              setRef={setModalRef} // new prop to pass the ref setting function
               buttonRef={priceButtonRef} // Pass ref to PriceDropdown
               minRent={rentValues[0]}
               maxRent={rentValues[1]}
