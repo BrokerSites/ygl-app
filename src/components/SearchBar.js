@@ -72,20 +72,21 @@ const SearchBar = ({
 useEffect(() => {
     const handleClickOutside = (event) => {
         if (modalRefs.current.length && modalRefs.current[0] && !modalRefs.current[0].contains(event.target)) {
-            if (modalState.showPriceInput && !priceButtonRef.current.contains(event.target)) {
-                setModalState(prevState => ({ ...prevState, showPriceInput: false }));
-            }
-            if (modalState.showBedBathInput && !bedBathButtonRef.current.contains(event.target)) {
-                setModalState(prevState => ({ ...prevState, showBedBathInput: false }));
-            }
-            if (modalState.showMoveInInput && !moveInButtonRef.current.contains(event.target)) {
-                setModalState(prevState => ({ ...prevState, showMoveInInput: false }));
-            }
-            if (modalState.showAllFiltersInput && !allFiltersButtonRef.current.contains(event.target)) {
-                setModalState(prevState => ({ ...prevState, showAllFiltersInput: false }));
-            }
+          if (modalState.showPriceInput && priceButtonRef.current && !priceButtonRef.current.contains(event.target)) {
+            setModalState(prevState => ({ ...prevState, showPriceInput: false }));
+          }
+          if (modalState.showBedBathInput && bedBathButtonRef.current && !bedBathButtonRef.current.contains(event.target)) {
+            setModalState(prevState => ({ ...prevState, showBedBathInput: false }));
+          }
+          if (modalState.showMoveInInput && moveInButtonRef.current && !moveInButtonRef.current.contains(event.target)) {
+            setModalState(prevState => ({ ...prevState, showMoveInInput: false }));
+          }
+          if (modalState.showAllFiltersInput && allFiltersButtonRef.current && !allFiltersButtonRef.current.contains(event.target)) {
+            setModalState(prevState => ({ ...prevState, showAllFiltersInput: false }));
+          }
         }
-    };
+      };
+      
 
     // We add the event listener if any modal is open
     if (modalState.showPriceInput || modalState.showBedBathInput || modalState.showMoveInInput || modalState.showAllFiltersInput) {
