@@ -17,6 +17,12 @@ const SearchBar = ({
     maxRent,
     onMinRentChange,
     onMaxRentChange,
+    bedsBaths,
+    setBedsBaths,
+    moveInOption,
+    setMoveInOption,
+    selectedDate,
+    setSelectedDate
 }) => {
     const [searchText, setSearchText] = useState('');
     const [modalState, setModalState] = useState({
@@ -25,10 +31,7 @@ const SearchBar = ({
         showMoveInInput: false, // New state for MoveIn
         showAllFiltersInput: false, // New state for MoveIn
     });
-    
-    const [moveInOption, setMoveInOption] = useState('Anytime');
-    const [selectedDate, setSelectedDate] = useState('');
-    const [bedsBaths, setBedsBaths] = useState({ beds: [0, 5], baths: [1, 5] });
+
     const priceButtonRef = useRef(null); // Ref for price button
     const bedBathButtonRef = useRef(null);
     const moveInButtonRef = useRef(null); // Add ref for Move-In button
