@@ -1,10 +1,9 @@
 import { Box } from '@mui/material';
 import React, { useState, useEffect, useRef } from 'react';
 
-const MoveIn = ({ isOpen, buttonRef, onToggle, setRef }) => {
+const MoveIn = ({ isOpen, buttonRef, onToggle, setRef, moveInOption, setMoveInOption, selectedDate, setSelectedDate
+}) => {
     const dropdownRef = useRef(null); // Ref for the dropdown itself
-    const [moveInOption, setMoveInOption] = useState('Anytime');
-    const [selectedDate, setSelectedDate] = useState('');
     const [dropdownStyle, setDropdownStyle] = useState({});
 
     const toggleDropdown = () => {

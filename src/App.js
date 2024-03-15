@@ -15,19 +15,19 @@ const App = () => {
     const [minRent, setMinRent] = useState(0); // Default minimum rent
     const [maxRent, setMaxRent] = useState(10000); // Default maximum rent
     const overlayRef = useRef(null);
-    
+
     const closeOverlays = () => {
-    // Logic to close autocomplete and price input overlays
+        // Logic to close autocomplete and price input overlays
     };
 
     const handleSelectTag = (tag) => {
-      // Check if the tag is in the cities list or matches the pattern "Neighborhood (City)"
-      const isValidTag = cities.includes(tag) || /\(.+\)/.test(tag);
-      if (isValidTag && !selectedTags.includes(tag)) {
-          setSelectedTags([...selectedTags, tag]);
-      }
+        // Check if the tag is in the cities list or matches the pattern "Neighborhood (City)"
+        const isValidTag = cities.includes(tag) || /\(.+\)/.test(tag);
+        if (isValidTag && !selectedTags.includes(tag)) {
+            setSelectedTags([...selectedTags, tag]);
+        }
     };
-  
+
 
     const handleRemoveTag = (tagToRemove) => {
         setSelectedTags(selectedTags.filter(tag => tag !== tagToRemove));
@@ -38,13 +38,13 @@ const App = () => {
             try {
                 const response = await axios.post('http://ec2-3-142-154-120.us-east-2.compute.amazonaws.com:3000/api/accounts');
                 const xmlData = response.data;
-        
+
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(xmlData, "text/xml");
-        
+
                 let cityList = [];
                 let neighborhoodList = [];
-        
+
                 const accounts = xmlDoc.getElementsByTagName('Account');
                 Array.from(accounts).forEach(account => {
                     const cities = account.getElementsByTagName('City');
@@ -54,7 +54,7 @@ const App = () => {
                             const cityName = nameElements[0].textContent.trim();
                             cityList.push(cityName);
                             const neighborhoods = cityElement.getElementsByTagName('Neighborhood');
-            
+
                             Array.from(neighborhoods).forEach(neighborhoodElement => {
                                 const neighborhoodName = neighborhoodElement.textContent.trim();
                                 neighborhoodList.push(`${neighborhoodName} (${cityName})`);
@@ -62,7 +62,7 @@ const App = () => {
                         }
                     });
                 });
-        
+
                 const combinedList = [...new Set([...cityList, ...neighborhoodList])];
                 setCities(combinedList);
             } catch (error) {
@@ -102,28 +102,19 @@ const App = () => {
         setCityNeighborhood(formatted);
     }, [selectedTags]);
 
-    useEffect(() => {
-        function handleClickOutside(event) {
-          if (overlayRef.current && !overlayRef.current.contains(event.target)) {
-            closeOverlays();
-          }
-        }
 
-        document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
 
     //Organize the variables we will send to the API here, then put them under a greater variable. 
     //Any time one of the minor variables change, the greater is updated and a new call is made
 
     useEffect(() => {
-      console.log("city_neighborhood:", cityNeighborhood);
-  }, [cityNeighborhood]); // This useEffect will run every time `cityNeighborhood` changes.
-  
-      
+        console.log("city_neighborhood:", cityNeighborhood);
+    }, [cityNeighborhood]); // This useEffect will run every time `cityNeighborhood` changes.
+
+
+
+
     const toggleMobileView = () => setIsMobileMapView(!isMobileMapView);
 
     return (
@@ -143,16 +134,16 @@ const App = () => {
                 />
             </div>
             <div className="desktop-view">
-              <div className='listings-and-map'>
-              <ListingsContainer
-                    listings={listings}
-                    selectedTags={selectedTags}
-                    onRemoveTag={handleRemoveTag}
-                />
-                <div className='map-container'>
-                    <MapComponent listings={listings} />
+                <div className='listings-and-map'>
+                    <ListingsContainer
+                        listings={listings}
+                        selectedTags={selectedTags}
+                        onRemoveTag={handleRemoveTag}
+                    />
+                    <div className='map-container'>
+                        <MapComponent listings={listings} />
+                    </div>
                 </div>
-              </div>
 
             </div>
             <div className="mobile-view">

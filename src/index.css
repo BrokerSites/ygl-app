@@ -137,7 +137,7 @@ code {
 
 @media (max-width: 1000px) {
 
-  .bb-btn,
+  .p-btn,
   .bb-btn,
   .mi-btn,
   .price-btn {
@@ -365,9 +365,12 @@ code {
 
 .mi-select{
 min-width: 150px;
+min-height: 26px;
+margin-right: 5px;
+
 }
 
-.p-btn, .bb-btn, .mi-btn{
+.p-btn, .bb-btn, .mi-btn, .af-btn{
 width: fit-content;
 }
 
@@ -380,9 +383,37 @@ width: fit-content;
   border-radius: 4px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  transform: translateX(-53%); /* Align the box as needed */
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   gap: 2.5em;
   width: fit-content;
+  max-height: 90vh; /* Max height as a percentage of the viewport height */
+  overflow: auto; /* Enable scrolling */
 }
+
+@media (max-width: 1000px) {
+.af-input-overlay{
+  top: 45% !important
+}
+  
+}
+
+.af-checks{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.af-check-wrap{
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+}
+
+.input-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+

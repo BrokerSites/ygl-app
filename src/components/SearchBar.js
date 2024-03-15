@@ -4,6 +4,7 @@ import Autocomplete from './Autocomplete';
 import TagBox from './TagBox';
 import BedBathDropdown from './BedBathDropdown';
 import MoveIn from './MoveIn';
+import AllFilters from './AllFilters';
 
 const SearchBar = ({
     cities,
@@ -22,12 +23,16 @@ const SearchBar = ({
         showPriceInput: false,
         showBedBathInput: false,
         showMoveInInput: false, // New state for MoveIn
+        showAllFiltersInput: false, // New state for MoveIn
     });
-    const [rentValues, setRentValues] = useState([minRent, maxRent]);
+    
+    const [moveInOption, setMoveInOption] = useState('Anytime');
+    const [selectedDate, setSelectedDate] = useState('');
     const [bedsBaths, setBedsBaths] = useState({ beds: [0, 5], baths: [1, 5] });
     const priceButtonRef = useRef(null); // Ref for price button
     const bedBathButtonRef = useRef(null);
     const moveInButtonRef = useRef(null); // Add ref for Move-In button
+    const allFiltersButtonRef = useRef(null); // Add ref for Move-In button
 
     const modalRefs = useRef([]);
     const setModalRef = (element) => {
@@ -76,21 +81,26 @@ useEffect(() => {
             if (modalState.showMoveInInput && !moveInButtonRef.current.contains(event.target)) {
                 setModalState(prevState => ({ ...prevState, showMoveInInput: false }));
             }
+            if (modalState.showAllFiltersInput && !allFiltersButtonRef.current.contains(event.target)) {
+                setModalState(prevState => ({ ...prevState, showAllFiltersInput: false }));
+            }
         }
     };
 
     // We add the event listener if any modal is open
-    if (modalState.showPriceInput || modalState.showBedBathInput || modalState.showMoveInInput) {
+    if (modalState.showPriceInput || modalState.showBedBathInput || modalState.showMoveInInput || modalState.showAllFiltersInput) {
         document.addEventListener('mousedown', handleClickOutside);
     }
 
     // Cleanup the event listener when the component is unmounted or if all modals are closed
     return () => {
-        if (!modalState.showPriceInput && !modalState.showBedBathInput && !modalState.showMoveInInput) {
+        if (!modalState.showPriceInput && !modalState.showBedBathInput && !modalState.showMoveInInput && !modalState.showAllFiltersInput) {
             document.removeEventListener('mousedown', handleClickOutside);
         }
     };
-}, [modalState, priceButtonRef, bedBathButtonRef, moveInButtonRef]);
+}, [modalState, priceButtonRef, bedBathButtonRef, moveInButtonRef, allFiltersButtonRef]);
+
+
 
 
     return (
@@ -116,12 +126,12 @@ useEffect(() => {
           <PriceDropdown
               setRef={setModalRef} // new prop to pass the ref setting function
               buttonRef={priceButtonRef} // Pass ref to PriceDropdown
-              minRent={rentValues[0]}
-              maxRent={rentValues[1]}
+              minRent={minRent}
+              maxRent={maxRent}
               onRentChange={(newValue) => {
-                  setRentValues(newValue);
-                  onMinRentChange(newValue[0]);
-                  onMaxRentChange(newValue[1]);
+                  const [newMinRent, newMaxRent] = newValue;
+                  onMinRentChange(newMinRent);
+                  onMaxRentChange(newMaxRent);
               }}
               isOpen={modalState.showPriceInput}
           />
@@ -157,12 +167,41 @@ useEffect(() => {
                 buttonRef={moveInButtonRef} // Pass ref to MoveIn
                 isOpen={modalState.showMoveInInput}
                 onToggle={() => toggleModal('showMoveInInput')}
+                moveInOption={moveInOption}
+                setMoveInOption={setMoveInOption}
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
             />
             )}
           <div className="col-auto">
-              <button className="btn btn-primary" type="button">
-                  All Filters
-              </button>
+          <button
+                ref={allFiltersButtonRef} // Attach ref to Move-In button
+                className="btn btn-primary af-btn"
+                onClick={() => toggleModal('showAllFiltersInput')}
+            >
+                All Filters
+            </button>
+            {modalState.showAllFiltersInput && (
+            <AllFilters
+                setRef={setModalRef} // new prop to pass the ref setting function
+                buttonRef={allFiltersButtonRef} // Pass ref to MoveIn
+                isOpen={modalState.showAllFiltersInput}
+                onToggle={() => toggleModal('showAllFiltersInput')}
+                minRent={minRent}
+                maxRent={maxRent}
+                onRentChange={(newValue) => {
+                  const [newMinRent, newMaxRent] = newValue;
+                  onMinRentChange(newMinRent);
+                  onMaxRentChange(newMaxRent);
+                }}
+                bedsBaths={bedsBaths}
+                onBedsBathsChange={setBedsBaths}
+                moveInOption={moveInOption}
+                setMoveInOption={setMoveInOption}
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+            />
+            )}
           </div>
       </div>
       <div className="row mobile-options">
