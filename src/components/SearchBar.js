@@ -8,6 +8,8 @@ import AllFilters from './AllFilters';
 
 const SearchBar = ({
     cities,
+    modalState,
+    setModalState,
     onSelectTag,
     selectedTags,
     onRemoveTag,
@@ -25,12 +27,7 @@ const SearchBar = ({
     setSelectedDate
 }) => {
     const [searchText, setSearchText] = useState('');
-    const [modalState, setModalState] = useState({
-        showPriceInput: false,
-        showBedBathInput: false,
-        showMoveInInput: false, // New state for MoveIn
-        showAllFiltersInput: false, // New state for MoveIn
-    });
+
 
     const priceButtonRef = useRef(null); // Ref for price button
     const bedBathButtonRef = useRef(null);
