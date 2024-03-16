@@ -409,6 +409,7 @@ width: fit-content;
   display: flex;
   flex-direction: row;
   gap: 2px;
+  margin: 0 5px 0 5px;
 }
 
 .input-container{

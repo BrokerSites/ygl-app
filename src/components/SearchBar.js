@@ -24,7 +24,13 @@ const SearchBar = ({
     moveInOption,
     setMoveInOption,
     selectedDate,
-    setSelectedDate
+    setSelectedDate,
+    hasPhotos,
+    setHasPhotos,
+    isPetFriendly,
+    setIsPetFriendly,
+    hasParking,
+    setHasParking
 }) => {
     const [searchText, setSearchText] = useState('');
 
@@ -201,6 +207,12 @@ useEffect(() => {
                 setMoveInOption={setMoveInOption}
                 selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}
+                hasPhotos={hasPhotos}
+                setHasPhotos={setHasPhotos}
+                isPetFriendly={isPetFriendly}
+                setIsPetFriendly={setIsPetFriendly}
+                hasParking={hasParking}
+                setHasParking={setHasParking}
             />
             )}
           </div>

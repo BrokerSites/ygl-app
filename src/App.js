@@ -18,6 +18,9 @@ const App = () => {
     const [moveInOption, setMoveInOption] = useState('Anytime');
     const [selectedDate, setSelectedDate] = useState('');
     const [bedsBaths, setBedsBaths] = useState({ beds: [0, 5], baths: [1, 5] });
+    const [hasPhotos, setHasPhotos] = useState(false);
+    const [isPetFriendly, setIsPetFriendly] = useState(false);
+    const [hasParking, setHasParking] = useState(false);
 
     const [modalState, setModalState] = useState({
         showPriceInput: false,
@@ -196,7 +199,10 @@ const App = () => {
             minRent,
             maxRent,
             moveInOption,
-            selectedDate
+            selectedDate,
+            hasPhotos,
+            isPetFriendly,
+            hasParking
         };
 
         const valuesChanged = Object.keys(currentValues).some(key =>
@@ -239,7 +245,10 @@ const App = () => {
                 min_rent: minRent,
                 max_rent: maxRent >= 10000 ? undefined : maxRent,
                 avail_from: ['Anytime', 'Before', 'Now'].includes(moveInOption) ? undefined : availFrom,
-                avail_to: ['Anytime', 'After'].includes(moveInOption) ? undefined : availTo
+                avail_to: ['Anytime', 'After'].includes(moveInOption) ? undefined : availTo,
+                photo: hasPhotos ? 'Y' : undefined,
+                pet: isPetFriendly ? 'friendly' : undefined,
+                parking: hasParking ? 'Y' : undefined
             };
 
             Object.keys(apiParams).forEach(key => apiParams[key] === undefined && delete apiParams[key]);
@@ -293,6 +302,12 @@ const App = () => {
                     setMoveInOption={setMoveInOption}
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
+                    hasPhotos={hasPhotos}
+                    setHasPhotos={setHasPhotos}
+                    isPetFriendly={isPetFriendly}
+                    setIsPetFriendly={setIsPetFriendly}
+                    hasParking={hasParking}
+                    setHasParking={setHasParking}
                 />
             </div>
             <div className="desktop-view">

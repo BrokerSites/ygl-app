@@ -12,7 +12,13 @@ const AllFilters = ({
     moveInOption, 
     setMoveInOption, 
     selectedDate, 
-    setSelectedDate
+    setSelectedDate,
+    hasPhotos,
+    setHasPhotos,
+    isPetFriendly,
+    setIsPetFriendly,
+    hasParking,
+    setHasParking
 }) => {
     const dropdownRef = useRef(null);
     const [dropdownStyle, setDropdownStyle] = useState({});
@@ -222,8 +228,8 @@ const AllFilters = ({
                     <input
                         type="checkbox"
                         id="pets"
-                        checked={filters.pets}
-                        onChange={() => handleFilterChange('pets')}
+                        checked={isPetFriendly}
+                        onChange={() => setIsPetFriendly(!isPetFriendly)}
                     />
                     <label htmlFor="petFriendly">Pet Friendly</label>
                 </div>
@@ -231,19 +237,19 @@ const AllFilters = ({
                     <input
                         type="checkbox"
                         id="parking"
-                        checked={filters.parking}
-                        onChange={() => handleFilterChange('parking')}
+                        checked={hasParking}
+                        onChange={() => setHasParking(!hasParking)}
                     />
-                    <label htmlFor="freeParking">Parking</label>
+                    <label htmlFor="freeParking">Has Parking</label>
                 </div>
                 <div className='af-check-wrap'>
                     <input
                         type="checkbox"
                         id="photos"
-                        checked={filters.pool}
-                        onChange={() => handleFilterChange('photos')}
+                        checked={hasPhotos}
+                        onChange={() => setHasPhotos(!hasPhotos)}
                     />
-                    <label htmlFor="pool">Photos</label>
+                    <label htmlFor="pool">Has Photos</label>
                 </div>
                 {/* Add more filter options as needed */}
             </form>
