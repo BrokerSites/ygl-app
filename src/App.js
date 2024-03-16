@@ -10,7 +10,7 @@ const App = () => {
     const [isMobileMapView, setIsMobileMapView] = useState(false);
     const [cities, setCities] = useState([]);
     const [listings, setListings] = useState([]);
-    
+
     const [selectedTags, setSelectedTags] = useState([]);
     const [cityNeighborhood, setCityNeighborhood] = useState('');
     const [minRent, setMinRent] = useState(0); // Default minimum rent
@@ -25,7 +25,7 @@ const App = () => {
         showMoveInInput: false, // New state for MoveIn
         showAllFiltersInput: false, // New state for MoveIn
     });
-    
+
 
     const handleSelectTag = (tag) => {
         // Check if the tag is in the cities list or matches the pattern "Neighborhood (City)"
@@ -118,41 +118,41 @@ const App = () => {
     const prevSelectedTagsRef = useRef(selectedTags);
     const upperLimitForBaths = 20; // Max limit for baths
     const previousValuesRef = useRef({ cityNeighborhood, bedsBaths, minRent, maxRent, moveInOption, selectedDate });
-    
+
     const prepareBedsBathsValues = (bedsBaths) => {
         let minBed = bedsBaths.beds[0];
         let maxBed = bedsBaths.beds[1];
         let bathsRange = [];
-    
+
         // Handle beds
         if (maxBed === '5+' || maxBed === 5) {
             maxBed = undefined; // No upper limit for beds
         }
-    
+
         // Handle baths
         let minBath = parseInt(bedsBaths.baths[0]);
         let maxBath = parseInt(bedsBaths.baths[1] === '5+' ? upperLimitForBaths : bedsBaths.baths[1]);
-        
+
         if (maxBath === 5) {
             maxBath = upperLimitForBaths; // Extend to the upper limit
         }
-    
+
         for (let i = minBath; i <= maxBath; i++) {
             bathsRange.push(i);
         }
-    
+
         return { minBed, maxBed, bathsRange };
     };
 
     const formatDateForApi = (moveInOption, selectedDate) => {
         let availFrom, availTo;
-    
+
         // Function to format date from YYYY-MM-DD to MM/DD/YY
         const formatDate = (dateString) => {
             const date = new Date(dateString);
             return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear().toString().slice(-2)}`;
         };
-    
+
         switch (moveInOption) {
             case 'Anytime':
                 availFrom = undefined;
@@ -168,7 +168,7 @@ const App = () => {
                 availFrom = formatDate(selectedDate); // Use the selected date for 'After'
                 break;
         }
-    
+
         return { availFrom, availTo };
     };
 
@@ -185,10 +185,10 @@ const App = () => {
     }, [selectedTags]); // This ensures cityNeighborhood is updated as soon as selectedTags change
 
     useEffect(() => {
-          
+
         const modalJustClosed = Object.entries(modalState).some(([key, value]) => !value && prevModalStateRef.current[key]);
         const tagsChanged = selectedTags.length !== prevSelectedTagsRef.current.length;
-        
+
 
         const currentValues = {
             cityNeighborhood: selectedTags.map(tag => tag.includes('(') ? tag.match(/(.*)\s\((.*)\)/).slice(2).join(':') : tag).join(','),
@@ -199,16 +199,16 @@ const App = () => {
             selectedDate
         };
 
-        const valuesChanged = Object.keys(currentValues).some(key => 
+        const valuesChanged = Object.keys(currentValues).some(key =>
             JSON.stringify(currentValues[key]) !== JSON.stringify(previousValuesRef.current[key])
         );
 
         if ((modalJustClosed || tagsChanged) && valuesChanged) {
-            
+
             const { minBed, maxBed, bathsRange } = prepareBedsBathsValues(bedsBaths);
             const baths = bathsRange.join(','); // Store the joined baths range in a variable
             const { availFrom, availTo } = formatDateForApi(moveInOption, selectedDate);
-            
+
             const formattedCityNeighborhood = selectedTags.map(tag => {
                 if (tag.includes('(')) {
                     const parts = tag.match(/(.*)\s\((.*)\)/);
@@ -216,7 +216,7 @@ const App = () => {
                 }
                 return tag;
             }).join(',');
-            
+
 
             console.log("City Neighborhood:", formattedCityNeighborhood);
             console.log("Min Bed:", minBed);
@@ -231,7 +231,8 @@ const App = () => {
             // Here you would trigger the API request with these parameters
 
             const apiParams = {
-                city_neighborhood: currentValues.cityNeighborhood.trim() ? currentValues.cityNeighborhood : undefined,
+                page_count: 100,
+                city_neighborhood: formattedCityNeighborhood,
                 min_bed: minBed,
                 max_bed: maxBed !== undefined ? maxBed : undefined,
                 baths: baths,
@@ -242,18 +243,27 @@ const App = () => {
             };
 
             Object.keys(apiParams).forEach(key => apiParams[key] === undefined && delete apiParams[key]);
-            
+
+            (async () => {
+                try {
+                    const response = await axios.post('http://ec2-3-142-154-120.us-east-2.compute.amazonaws.com:3000/api/rentals', apiParams);
+                    console.log("Response from API:", response.data); // Log the entire response data from the API
+                    setListings(response.data.listings || []);
+                } catch (error) {
+                    console.error('Error fetching listings:', error);
+                    setListings([]); // Reset the listings on error
+                }
+            })(); // Immediately invoked async function to handle the API call
+
             console.log("API Parameters:", apiParams);
 
             previousValuesRef.current = currentValues;
         }
-    
+
         // Update the refs for the next render
         prevModalStateRef.current = modalState;
         prevSelectedTagsRef.current = selectedTags.slice();
     }, [modalState, selectedTags, bedsBaths, minRent, maxRent, moveInOption, selectedDate]);
-    
-    
 
 
 
@@ -279,7 +289,7 @@ const App = () => {
                     onMaxRentChange={setMaxRent}
                     bedsBaths={bedsBaths}
                     setBedsBaths={setBedsBaths}
-                    moveInOption= {moveInOption}
+                    moveInOption={moveInOption}
                     setMoveInOption={setMoveInOption}
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
