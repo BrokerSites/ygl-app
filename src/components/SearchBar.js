@@ -36,7 +36,9 @@ const SearchBar = ({
     listings,
     onPageChange,
     onSortChange,
-    sortParams
+    sortParams,
+    currentPage={currentPage},
+    itemsPerPage={itemsPerPage}
 }) => {
     const [searchText, setSearchText] = useState('');
 
@@ -241,6 +243,8 @@ useEffect(() => {
       total={totalResults} 
       onSortChange={onSortChange}
       sortParams={sortParams}
+      currentPage={currentPage}
+      itemsPerPage={itemsPerPage}
       />
       </div>
   </div>

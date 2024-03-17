@@ -51,8 +51,7 @@ const App = () => {
     
     const handlePageChange = (page) => {
         setCurrentPage(page);
-        // Here you might want to call your API to fetch the listings for the new page
-    };
+        };
 
     const [modalState, setModalState] = useState({
         showPriceInput: false,
@@ -134,7 +133,6 @@ const App = () => {
     useEffect(() => {
     // Build your API parameters here as you have them already defined
     const apiParams = {
-        page_count: 100,
         city_neighborhood: cityNeighborhood,
         min_bed: prepareBedsBathsValues(bedsBaths).minBed,
         max_bed: prepareBedsBathsValues(bedsBaths).maxBed,
@@ -148,11 +146,13 @@ const App = () => {
         parking: hasParking ? 'Y' : undefined,
         ...(sortParams.sort_name && { sort_name: sortParams.sort_name }),
         ...(sortParams.sort_dir && { sort_dir: sortParams.sort_dir }),
+        page_count: itemsPerPage,
+        page_index: currentPage, // Use the current page here
     };
 
     // This will trigger the fetchRentals function whenever sortParams changes.
     fetchRentals(apiParams);
-}, [sortParams]);
+}, [sortParams, currentPage]);
 
 
     useEffect(() => {
@@ -372,6 +372,8 @@ const App = () => {
                     listings={listings}
                     sortParams={sortParams}
                     onSortChange={handleSortChange}
+                    currentPage={currentPage}
+                    itemsPerPage={itemsPerPage}
                 />
             </div>
             <div className="desktop-view">
@@ -381,6 +383,8 @@ const App = () => {
                         selectedTags={selectedTags}
                         onRemoveTag={handleRemoveTag}
                         totalResults={totalResults}
+                        itemsPerPage={itemsPerPage}
+                        page={currentPage}
                         currentPage={currentPage}
                         onPageChange={handlePageChange}
                         onSortChange={handleSortChange}
@@ -401,6 +405,8 @@ const App = () => {
                         selectedTags={selectedTags}
                         onRemoveTag={handleRemoveTag}
                         totalResults={totalResults}
+                        itemsPerPage={itemsPerPage}
+                        page={currentPage}
                         currentPage={currentPage}
                         onPageChange={handlePageChange}
                     />

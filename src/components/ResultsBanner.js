@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
-const ResultsBanner = ({ count, total, onSortChange, sortParams = { sort_name: null, sort_dir: null } }) => {
-  const startCount = 1;
-  const endCount = count < 100 ? count : 100;
+const ResultsBanner = ({ itemsPerPage, currentPage, count, total, onSortChange, sortParams = { sort_name: null, sort_dir: null } }) => {
+  const startCount = (currentPage - 1) * itemsPerPage + 1;
+  let endCount = startCount + count - 1;
 
   // Use `sortParams` with a fallback in case it's undefined
   let selectedSortValue = 'default';
@@ -11,6 +11,12 @@ const ResultsBanner = ({ count, total, onSortChange, sortParams = { sort_name: n
   } else if (sortParams && sortParams.sort_name === 'rent' && sortParams.sort_dir === 'asc') {
     selectedSortValue = 'lowToHigh';
   }
+
+  if (endCount > total) {
+    endCount = total;
+  }
+
+  onSortChange = onSortChange || (() => {});
 
   return (
     <div className="results-banner">
