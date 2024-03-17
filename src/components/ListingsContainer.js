@@ -4,7 +4,7 @@ import TagBox from './TagBox'; // Import TagBox component
 import ResultsBanner from './ResultsBanner'; // Import ResultsBanner component
 import PaginationComponent from './PaginationComponent.js';
 
-const ListingsContainer = ({ listings, selectedTags, onRemoveTag, totalResults, currentPage, onPageChange, onSortChange }) => {
+const ListingsContainer = ({ listings, selectedTags, onRemoveTag, totalResults, currentPage, onPageChange, onSortChange, sortParams }) => {
   if (!Array.isArray(listings)) {
     console.error('Listings is not an array', listings);
     return null;
@@ -15,13 +15,13 @@ const ListingsContainer = ({ listings, selectedTags, onRemoveTag, totalResults, 
 
   return (
     <div className="listings-container">
-      
       <div className="tag-box-container">
       <TagBox tags={tags} onRemoveTag={onRemoveTag} />
       <ResultsBanner 
       count={listings.length} 
       total={totalResults} 
       onSortChange={onSortChange}
+      sortParams={sortParams}
       />
       </div>
       

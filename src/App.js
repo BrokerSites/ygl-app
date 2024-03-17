@@ -370,6 +370,8 @@ const App = () => {
                     setHasParking={setHasParking}
                     totalResults={totalResults}
                     listings={listings}
+                    sortParams={sortParams}
+                    onSortChange={handleSortChange}
                 />
             </div>
             <div className="desktop-view">
@@ -382,6 +384,7 @@ const App = () => {
                         currentPage={currentPage}
                         onPageChange={handlePageChange}
                         onSortChange={handleSortChange}
+                        sortParams={sortParams}
                     />
                     <div className='map-container'>
                         <MapComponent listings={listings} />
@@ -400,7 +403,6 @@ const App = () => {
                         totalResults={totalResults}
                         currentPage={currentPage}
                         onPageChange={handlePageChange}
-                        onSortChange={handleSortChange}
                     />
                 )}
             </div>

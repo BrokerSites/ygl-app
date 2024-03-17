@@ -36,8 +36,7 @@ const SearchBar = ({
     listings,
     onPageChange,
     onSortChange,
-    handlePageChange,
-    handleSortChange,
+    sortParams
 }) => {
     const [searchText, setSearchText] = useState('');
 
@@ -240,7 +239,8 @@ useEffect(() => {
       <ResultsBanner 
       count={listings.length} 
       total={totalResults} 
-      onSortChange={handleSortChange}
+      onSortChange={onSortChange}
+      sortParams={sortParams}
       />
       </div>
   </div>
