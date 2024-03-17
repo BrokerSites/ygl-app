@@ -64,6 +64,9 @@ code {
   /* Enable vertical scrolling only within the listings container */
   overflow-x: hidden;
   scrollbar-gutter: stable;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   /* Reserve space for the scrollbar */
 }
 
@@ -133,6 +136,7 @@ code {
 
   .card-container {
     padding-right: 2rem;
+    width: 100%;
   }
 }
 
@@ -277,7 +281,8 @@ code {
   /* Ensures the tag box stays above other content */
   padding: 1rem;
   padding-bottom: .25rem;
-  padding-top: 0rem;
+  padding-top: 0rem;  
+  width: 100%;
   
   /* Optional padding for aesthetic purposes */
 
@@ -430,4 +435,12 @@ width: fit-content;
 .sort-dropdown{
   display: flex;
   gap: 3px;
+}
+
+.pagination-component{
+  margin-bottom: .5rem;
+}
+
+.card-container {
+  width: 100%;
 }

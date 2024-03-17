@@ -22,6 +22,37 @@ const App = () => {
     const [isPetFriendly, setIsPetFriendly] = useState(false);
     const [hasParking, setHasParking] = useState(false);
     const [totalResults, setTotalResults] = useState(0); // Add a state variable to store the total results
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 100;
+    const [sortParams, setSortParams] = useState({ sort_name: null, sort_dir: null });
+
+    const handleSortChange = (event) => {
+        const value = event.target.value;
+        let sortName, sortDir;
+        
+        switch (value) {
+          case 'highToLow':
+            sortName = 'rent';
+            sortDir = 'desc';
+            break;
+          case 'lowToHigh':
+            sortName = 'rent';
+            sortDir = 'asc';
+            break;
+          case 'default':
+          default:
+            sortName = null;
+            sortDir = null;
+            break;
+        }
+      
+        setSortParams({ sort_name: sortName, sort_dir: sortDir });
+      };
+    
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        // Here you might want to call your API to fetch the listings for the new page
+    };
 
     const [modalState, setModalState] = useState({
         showPriceInput: false,
@@ -84,25 +115,45 @@ const App = () => {
         fetchCitiesAndNeighborhoods();
     }, []);
 
-    useEffect(() => {
-        const fetchRentals = async () => {
-            try {
-                const response = await axios.post('http://ec2-3-142-154-120.us-east-2.compute.amazonaws.com:3000/api/rentals');
-                if (response.data && response.data.listings) {
-                    setListings(response.data.listings);
-                    setTotalResults(response.data.total); // Set the initial total results from the API response
-                } else {
-                    throw new Error('Listings data is not available in the response');
-                }
-            } catch (error) {
-                console.error('Error fetching rental listings:', error);
-                setListings([]);
-                setTotalResults(0); // Reset the total results on error
+    const fetchRentals = async (params) => {
+        try {
+            const response = await axios.post('http://ec2-3-142-154-120.us-east-2.compute.amazonaws.com:3000/api/rentals', params);
+            if (response.data && response.data.listings) {
+                setListings(response.data.listings);
+                setTotalResults(response.data.total);
+            } else {
+                throw new Error('Listings data is not available in the response');
             }
-        };
+        } catch (error) {
+            console.error('Error fetching rental listings:', error);
+            setListings([]);
+            setTotalResults(0);
+        }
+    };
 
-        fetchRentals();
-    }, []);
+    useEffect(() => {
+        // Build your API parameters here as you have them already defined
+        const apiParams = {
+            page_count: 100,
+            city_neighborhood: cityNeighborhood,
+            min_bed: prepareBedsBathsValues(bedsBaths).minBed,
+            max_bed: prepareBedsBathsValues(bedsBaths).maxBed,
+            baths: prepareBedsBathsValues(bedsBaths).bathsRange.join(','),
+            min_rent: minRent,
+            max_rent: maxRent >= 10000 ? undefined : maxRent,
+            avail_from: formatDateForApi(moveInOption, selectedDate).availFrom,
+            avail_to: formatDateForApi(moveInOption, selectedDate).availTo,
+            photo: hasPhotos ? 'Y' : undefined,
+            pet: isPetFriendly ? 'friendly' : undefined,
+            parking: hasParking ? 'Y' : undefined,
+            ...(sortParams.sort_name && { sort_name: sortParams.sort_name }),
+            ...(sortParams.sort_dir && { sort_dir: sortParams.sort_dir }),
+        };
+    
+        // This will trigger the fetchRentals function whenever sortParams changes.
+        fetchRentals(apiParams);
+    }, [sortParams]);
+    
 
     useEffect(() => {
         const formatted = selectedTags.map(tag => {
@@ -251,7 +302,9 @@ const App = () => {
                 avail_to: ['Anytime', 'After'].includes(moveInOption) ? undefined : availTo,
                 photo: hasPhotos ? 'Y' : undefined,
                 pet: isPetFriendly ? 'friendly' : undefined,
-                parking: hasParking ? 'Y' : undefined
+                parking: hasParking ? 'Y' : undefined,
+                ...(sortParams.sort_name && { sort_name: sortParams.sort_name }),
+                ...(sortParams.sort_dir && { sort_dir: sortParams.sort_dir }),
             };
 
             Object.keys(apiParams).forEach(key => apiParams[key] === undefined && delete apiParams[key]);
@@ -282,7 +335,7 @@ const App = () => {
 
     useEffect(() => {
         console.log("Total Results:", totalResults);
-      }, [totalResults]);
+    }, [totalResults]);
 
 
     const toggleMobileView = () => setIsMobileMapView(!isMobileMapView);
@@ -326,6 +379,9 @@ const App = () => {
                         selectedTags={selectedTags}
                         onRemoveTag={handleRemoveTag}
                         totalResults={totalResults}
+                        currentPage={currentPage}
+                        onPageChange={handlePageChange}
+                        onSortChange={handleSortChange}
                     />
                     <div className='map-container'>
                         <MapComponent listings={listings} />
@@ -341,6 +397,10 @@ const App = () => {
                         listings={listings}
                         selectedTags={selectedTags}
                         onRemoveTag={handleRemoveTag}
+                        totalResults={totalResults}
+                        currentPage={currentPage}
+                        onPageChange={handlePageChange}
+                        onSortChange={handleSortChange}
                     />
                 )}
             </div>

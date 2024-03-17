@@ -1,8 +1,6 @@
-// ResultsBanner.js
-
 import React from 'react';
 
-const ResultsBanner = ({ count, total }) => {
+const ResultsBanner = ({ count, total, onSortChange }) => {
   // You might want to implement pagination to handle the starting count
   const startCount = 1;
   const endCount = count < 100 ? count : 100;
@@ -13,11 +11,11 @@ const ResultsBanner = ({ count, total }) => {
       {/* Placeholder for the sort dropdown */}
       <div className="sort-dropdown">
         Sort :
-        <select>
-          <option value="recommended">Default</option>
-          <option value="highToLow">High to Low</option>
-          <option value="lowToHigh">Low to High</option>
-        </select>
+        <select onChange={onSortChange}>
+        <option value="default">Default</option>
+        <option value="highToLow">High to Low</option>
+        <option value="lowToHigh">Low to High</option>
+      </select>
       </div>
     </div>
   );
