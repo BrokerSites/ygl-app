@@ -21,6 +21,7 @@ const App = () => {
     const [hasPhotos, setHasPhotos] = useState(false);
     const [isPetFriendly, setIsPetFriendly] = useState(false);
     const [hasParking, setHasParking] = useState(false);
+    const [totalResults, setTotalResults] = useState(0); // Add a state variable to store the total results
 
     const [modalState, setModalState] = useState({
         showPriceInput: false,
@@ -89,12 +90,14 @@ const App = () => {
                 const response = await axios.post('http://ec2-3-142-154-120.us-east-2.compute.amazonaws.com:3000/api/rentals');
                 if (response.data && response.data.listings) {
                     setListings(response.data.listings);
+                    setTotalResults(response.data.total); // Set the initial total results from the API response
                 } else {
                     throw new Error('Listings data is not available in the response');
                 }
             } catch (error) {
                 console.error('Error fetching rental listings:', error);
                 setListings([]);
+                setTotalResults(0); // Reset the total results on error
             }
         };
 
@@ -258,9 +261,11 @@ const App = () => {
                     const response = await axios.post('http://ec2-3-142-154-120.us-east-2.compute.amazonaws.com:3000/api/rentals', apiParams);
                     console.log("Response from API:", response.data); // Log the entire response data from the API
                     setListings(response.data.listings || []);
+                    setTotalResults(response.data.total || 0); // Update the total results
                 } catch (error) {
                     console.error('Error fetching listings:', error);
                     setListings([]); // Reset the listings on error
+                    setTotalResults(0); // Reset the total results on error
                 }
             })(); // Immediately invoked async function to handle the API call
 
@@ -275,7 +280,9 @@ const App = () => {
     }, [modalState, selectedTags, bedsBaths, minRent, maxRent, moveInOption, selectedDate]);
 
 
-
+    useEffect(() => {
+        console.log("Total Results:", totalResults);
+      }, [totalResults]);
 
 
     const toggleMobileView = () => setIsMobileMapView(!isMobileMapView);
@@ -308,6 +315,8 @@ const App = () => {
                     setIsPetFriendly={setIsPetFriendly}
                     hasParking={hasParking}
                     setHasParking={setHasParking}
+                    totalResults={totalResults}
+                    listings={listings}
                 />
             </div>
             <div className="desktop-view">
@@ -316,6 +325,7 @@ const App = () => {
                         listings={listings}
                         selectedTags={selectedTags}
                         onRemoveTag={handleRemoveTag}
+                        totalResults={totalResults}
                     />
                     <div className='map-container'>
                         <MapComponent listings={listings} />

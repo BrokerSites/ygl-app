@@ -126,7 +126,8 @@ code {
 }
 
 @media (min-width: 1000px) {
-  .mobile-options {
+  .mobile-options,
+  .s-rb-wrap {
     display: none;
   }
 
@@ -140,7 +141,8 @@ code {
   .p-btn,
   .bb-btn,
   .mi-btn,
-  .price-btn {
+  .price-btn,
+  .rb-wrap {
     display: none;
   }
 
@@ -418,3 +420,14 @@ width: fit-content;
   justify-content: space-between;
 }
 
+.results-banner{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-top: .5rem;
+}
+
+.sort-dropdown{
+  display: flex;
+  gap: 3px;
+}

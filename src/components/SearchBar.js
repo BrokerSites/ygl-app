@@ -5,6 +5,7 @@ import TagBox from './TagBox';
 import BedBathDropdown from './BedBathDropdown';
 import MoveIn from './MoveIn';
 import AllFilters from './AllFilters';
+import ResultsBanner from './ResultsBanner'; // Import ResultsBanner component
 
 const SearchBar = ({
     cities,
@@ -30,7 +31,9 @@ const SearchBar = ({
     isPetFriendly,
     setIsPetFriendly,
     hasParking,
-    setHasParking
+    setHasParking,
+    totalResults,
+    listings
 }) => {
     const [searchText, setSearchText] = useState('');
 
@@ -213,6 +216,7 @@ useEffect(() => {
                 setIsPetFriendly={setIsPetFriendly}
                 hasParking={hasParking}
                 setHasParking={setHasParking}
+                listings
             />
             )}
           </div>
@@ -227,11 +231,9 @@ useEffect(() => {
                   {isMapView ? 'List' : 'Map'}
               </button>
           </div>
-          <div className="col-auto">
-              <button className="btn btn-outline-primary" type="button">
-                  Sort
-              </button>
-          </div>
+      </div>
+      <div className='s-rb-wrap'>
+      <ResultsBanner count={listings.length} total={totalResults} />
       </div>
   </div>
     );
