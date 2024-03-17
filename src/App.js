@@ -132,28 +132,28 @@ const App = () => {
     };
 
     useEffect(() => {
-        // Build your API parameters here as you have them already defined
-        const apiParams = {
-            page_count: 100,
-            city_neighborhood: cityNeighborhood,
-            min_bed: prepareBedsBathsValues(bedsBaths).minBed,
-            max_bed: prepareBedsBathsValues(bedsBaths).maxBed,
-            baths: prepareBedsBathsValues(bedsBaths).bathsRange.join(','),
-            min_rent: minRent,
-            max_rent: maxRent >= 10000 ? undefined : maxRent,
-            avail_from: formatDateForApi(moveInOption, selectedDate).availFrom,
-            avail_to: formatDateForApi(moveInOption, selectedDate).availTo,
-            photo: hasPhotos ? 'Y' : undefined,
-            pet: isPetFriendly ? 'friendly' : undefined,
-            parking: hasParking ? 'Y' : undefined,
-            ...(sortParams.sort_name && { sort_name: sortParams.sort_name }),
-            ...(sortParams.sort_dir && { sort_dir: sortParams.sort_dir }),
-        };
-    
-        // This will trigger the fetchRentals function whenever sortParams changes.
-        fetchRentals(apiParams);
-    }, [sortParams]);
-    
+    // Build your API parameters here as you have them already defined
+    const apiParams = {
+        page_count: 100,
+        city_neighborhood: cityNeighborhood,
+        min_bed: prepareBedsBathsValues(bedsBaths).minBed,
+        max_bed: prepareBedsBathsValues(bedsBaths).maxBed,
+        baths: prepareBedsBathsValues(bedsBaths).bathsRange.join(','),
+        min_rent: minRent,
+        max_rent: maxRent >= 10000 ? undefined : maxRent,
+        avail_from: formatDateForApi(moveInOption, selectedDate).availFrom,
+        avail_to: formatDateForApi(moveInOption, selectedDate).availTo,
+        photo: hasPhotos ? 'Y' : undefined,
+        pet: isPetFriendly ? 'friendly' : undefined,
+        parking: hasParking ? 'Y' : undefined,
+        ...(sortParams.sort_name && { sort_name: sortParams.sort_name }),
+        ...(sortParams.sort_dir && { sort_dir: sortParams.sort_dir }),
+    };
+
+    // This will trigger the fetchRentals function whenever sortParams changes.
+    fetchRentals(apiParams);
+}, [sortParams]);
+
 
     useEffect(() => {
         const formatted = selectedTags.map(tag => {

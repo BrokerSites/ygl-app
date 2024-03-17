@@ -33,7 +33,11 @@ const SearchBar = ({
     hasParking,
     setHasParking,
     totalResults,
-    listings
+    listings,
+    onPageChange,
+    onSortChange,
+    handlePageChange,
+    handleSortChange,
 }) => {
     const [searchText, setSearchText] = useState('');
 
@@ -233,7 +237,11 @@ useEffect(() => {
           </div>
       </div>
       <div className='s-rb-wrap'>
-      <ResultsBanner count={listings.length} total={totalResults} />
+      <ResultsBanner 
+      count={listings.length} 
+      total={totalResults} 
+      onSortChange={handleSortChange}
+      />
       </div>
   </div>
     );
