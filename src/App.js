@@ -7,6 +7,10 @@ import SearchBar from './components/SearchBar';
 import axios from 'axios';
 
 const App = () => {
+    
+    const queryParams = new URLSearchParams(window.location.search);
+    const siteDomain = queryParams.get('site');
+
     const [isMobileMapView, setIsMobileMapView] = useState(false);
     const [cities, setCities] = useState([]);
     const [listings, setListings] = useState([]);
@@ -77,7 +81,9 @@ const App = () => {
     useEffect(() => {
         const fetchCitiesAndNeighborhoods = async () => {
             try {
-                const response = await axios.post('http://ec2-3-142-154-120.us-east-2.compute.amazonaws.com:3000/api/accounts');
+                const response = await axios.post('http://ec2-3-142-154-120.us-east-2.compute.amazonaws.com:3000/api/accounts', {
+                    site: siteDomain
+                });
                 const xmlData = response.data;
 
                 const parser = new DOMParser();
@@ -133,6 +139,7 @@ const App = () => {
     useEffect(() => {
     // Build your API parameters here as you have them already defined
     const apiParams = {
+        site: siteDomain, // include the siteDomain in the API call parameters
         city_neighborhood: cityNeighborhood,
         min_bed: prepareBedsBathsValues(bedsBaths).minBed,
         max_bed: prepareBedsBathsValues(bedsBaths).maxBed,
@@ -291,6 +298,7 @@ const App = () => {
             // Here you would trigger the API request with these parameters
 
             const apiParams = {
+                site: siteDomain, // include the siteDomain in the API call parameters
                 page_count: 100,
                 city_neighborhood: formattedCityNeighborhood,
                 min_bed: minBed,
@@ -393,6 +401,7 @@ const App = () => {
                         onPageChange={handlePageChange}
                         onSortChange={handleSortChange}
                         sortParams={sortParams}
+                        siteDomain={siteDomain}
                     />
                     <div className='map-container'>
                         <MapComponent listings={listings} />
@@ -413,6 +422,7 @@ const App = () => {
                         page={currentPage}
                         currentPage={currentPage}
                         onPageChange={handlePageChange}
+                        siteDomain={siteDomain}
                     />
                 )}
             </div>
