@@ -37,8 +37,12 @@ const SearchBar = ({
     onPageChange,
     onSortChange,
     sortParams,
+    setSortParams,  // Add this to allow resetting sortParams
     currentPage={currentPage},
-    itemsPerPage={itemsPerPage}
+    itemsPerPage={itemsPerPage},
+    setSelectedTags,
+    setMinRent,
+    setMaxRent
 }) => {
     const [searchText, setSearchText] = useState('');
 
@@ -116,6 +120,18 @@ useEffect(() => {
 }, [modalState, priceButtonRef, bedBathButtonRef, moveInButtonRef, allFiltersButtonRef]);
 
 
+const clearSearch = () => {
+    setSelectedTags([]); // Assuming setSelectedTags is received as a prop
+    setMinRent(0); // Assuming setMinRent is received as a prop
+    setMaxRent(10000); // Assuming setMaxRent is received as a prop
+    setBedsBaths({ beds: [0, 5], baths: [1, 5] }); // Already received as a prop
+    setMoveInOption('Anytime'); // Already received as a prop
+    setSelectedDate(''); // Already received as a prop
+    setHasPhotos(false); // Already received as a prop
+    setIsPetFriendly(false); // Already received as a prop
+    setHasParking(false); // Already received as a prop
+    setSortParams({ sort_name: null, sort_dir: null }); // Assuming setSortParams is received as a prop
+};;
 
 
     return (
@@ -188,7 +204,7 @@ useEffect(() => {
                 setSelectedDate={setSelectedDate}
             />
             )}
-          <div className="col-auto">
+          
           <button
                 ref={allFiltersButtonRef} // Attach ref to Move-In button
                 className="btn btn-primary af-btn"
@@ -224,7 +240,12 @@ useEffect(() => {
                 listings
             />
             )}
-          </div>
+              <button
+                    className="btn btn-danger c-btn" // Using btn-danger for red color
+                    onClick={clearSearch}
+                >
+                    Clear
+            </button>
       </div>
       <div className="row mobile-options">
           <div className="col mobile-tag-box-container">

@@ -150,7 +150,7 @@ const AllFilters = ({
                                 type="text"
                                 name="beds-min"
                                 value={formatValue(bedsBaths.beds[0], 'beds')}
-                                onChange={handleInputChange}
+                                onChange={handleBedsBathsChange}
                                 onClick={(e) => e.target.select()}
                             />
                             <input
@@ -158,7 +158,7 @@ const AllFilters = ({
                                 type="text"
                                 name="beds-max"
                                 value={formatValue(bedsBaths.beds[1], 'beds')}
-                                onChange={handleInputChange}
+                                onChange={handleBedsBathsChange}
                                 onClick={(e) => e.target.select()}
                             />
                         </div>

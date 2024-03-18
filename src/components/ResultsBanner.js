@@ -16,7 +16,7 @@ const ResultsBanner = ({ itemsPerPage, currentPage, count, total, onSortChange, 
     endCount = total;
   }
 
-  onSortChange = onSortChange || (() => {});
+  onSortChange = onSortChange || (() => { });
 
   return (
     <div className="results-banner">

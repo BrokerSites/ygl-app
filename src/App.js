@@ -349,11 +349,14 @@ const App = () => {
                     cities={cities}
                     onSelectTag={handleSelectTag}
                     selectedTags={selectedTags}
+                    setSelectedTags={setSelectedTags} // Pass setSelectedTags as a prop
                     onRemoveTag={handleRemoveTag}
                     toggleView={toggleMobileView}
                     isMapView={isMobileMapView}
                     minRent={minRent}
+                    setMinRent={setMinRent} // Pass setMinRent as a prop
                     maxRent={maxRent}
+                    setMaxRent={setMaxRent} // Pass setMaxRent as a prop
                     onMinRentChange={setMinRent}
                     onMaxRentChange={setMaxRent}
                     bedsBaths={bedsBaths}
@@ -371,6 +374,7 @@ const App = () => {
                     totalResults={totalResults}
                     listings={listings}
                     sortParams={sortParams}
+                    setSortParams={setSortParams} // Add this line if you need to manipulate sortParams from SearchBar
                     onSortChange={handleSortChange}
                     currentPage={currentPage}
                     itemsPerPage={itemsPerPage}
