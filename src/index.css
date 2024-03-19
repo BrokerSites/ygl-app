@@ -155,7 +155,7 @@ code {
   }
 
   .listings-container {
-    padding-right: 1em;
+    padding-right: 2em;
   }
 
   .tag-box-container {
@@ -454,4 +454,8 @@ width: fit-content;
   display: flex;
   flex-direction: row;
   justify-content: center;
+}
+
+.details-inquire{
+  display:flex
 }

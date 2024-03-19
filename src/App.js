@@ -404,14 +404,14 @@ const App = () => {
                         siteDomain={siteDomain}
                     />
                     <div className='map-container'>
-                        <MapComponent listings={listings} />
+                        <MapComponent listings={listings} siteDomain={siteDomain}/>
                     </div>
                 </div>
 
             </div>
             <div className="mobile-view">
                 {isMobileMapView ? (
-                    <MapComponent listings={listings} />
+                    <MapComponent listings={listings} siteDomain={siteDomain} />
                 ) : (
                     <ListingsContainer
                         listings={listings}

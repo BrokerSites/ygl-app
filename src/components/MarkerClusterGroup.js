@@ -4,7 +4,7 @@ import L from 'leaflet';
 import 'leaflet.markercluster/dist/leaflet.markercluster';
 
 
-const MarkerClusterGroup = ({ listings }) => {
+const MarkerClusterGroup = ({ listings, siteDomain }) => {
     const map = useMap();
   
     useEffect(() => {
@@ -22,21 +22,28 @@ const MarkerClusterGroup = ({ listings }) => {
         const bedText = beds === 1 ? '1 bed' : `${beds} beds`;
         const bathText = baths === 1 ? '1 bath' : `${baths} baths`;
       
-        const popupContent = `
-        <div class="popup-content" style="text-align: center; width:17em;">
-          <div style="width: 100%; height: 0; padding-top: 75%; position: relative;">
-            <img src="${imageUrl}" alt="Listing" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" />
+        const popupContent = L.DomUtil.create('div', 'popup-content');
+        popupContent.innerHTML = `
+          <div style="text-align: center; width:17em; cursor: pointer;">
+            <div style="width: 100%; height: 0; padding-top: 75%; position: relative;">
+              <img src="${imageUrl}" alt="Listing" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" />
+            </div>
+            <div class="details" style="margin-top: 10px;">
+              <h4>$${price}</h4>
+              <div class="bbcity">
+                <p>${bedText}, ${bathText}</p>
+                <p>${city}</p> 
+              </div>
+            </div>
           </div>
-          <div class="details" style="margin-top: 10px;">
-            <h4>$${price}</h4>
-            <div class="bbcity">
-            <p>${bedText}, ${bathText}</p>
-            <p>${city}</p> 
-            <div>
-          </div>
-        </div>
-      `;
+        `;
       
+          // Add click event listener to the popup content
+        popupContent.addEventListener('click', () => {
+          const detailPageUrl = `${siteDomain}/property.html?id=${listing.id}`;
+          window.open(detailPageUrl, '_blank'); // Open in new tab or window
+        });
+
         const marker = L.marker([latitude, longitude], {
           icon: L.divIcon({
             html: `<div class="custom-icon">$${price}</div>`,
