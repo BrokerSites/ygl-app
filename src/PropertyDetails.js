@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import { Grid, TextField, Button, Typography, Paper } from '@mui/material'; // Make sure Paper is included here
+import { Grid, TextField, Button, Typography, Paper, Modal } from '@mui/material'; // Make sure Paper is included here
 
 
 
@@ -19,7 +19,14 @@ const PropertyDetails = () => {
     const [propertyDetails, setPropertyDetails] = useState(null);
     const [error, setError] = useState('');
     const theme = useTheme(); // Access theme to use breakpoints
-    const isXSmall = useMediaQuery(theme.breakpoints.down('md')); // Check if screen width is less than 1000px
+    const isXSmall = useMediaQuery(theme.breakpoints.down('md')); 
+    
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const handleOpen = () => setModalOpen(true);
+    const handleClose = () => setModalOpen(false);
+
+    const matches = useMediaQuery('(min-width:1000px)');
 
     useEffect(() => {
         // Set the body overflow to scroll when the component mounts
@@ -112,10 +119,40 @@ const PropertyDetails = () => {
         );
     };
 
+    const inquiryForm = (
+        <form noValidate autoComplete="off">
+        <TextField
+            fullWidth
+            label="Name"
+            margin="normal"
+        />
+        <TextField
+            fullWidth
+            label="Phone"
+            margin="normal"
+        />
+        <TextField
+            fullWidth
+            label="Email"
+            margin="normal"
+        />
+        <TextField
+            fullWidth
+            label="Message"
+            margin="normal"
+            multiline
+            rows={4}
+        />
+        <Button variant="contained" color="primary" style={{ marginTop: 16 }}>
+            Submit
+        </Button>
+    </form>
+    );
+
     const listing = propertyDetails.listings[0];
 
     return (
-        <div>
+        <div className='prop-det-container'>
 
             {propertyDetails.listings && propertyDetails.listings[0].unitPhotos && (
                 <Box
@@ -145,41 +182,50 @@ const PropertyDetails = () => {
                 </Box>
             )}
         
-            <div className='details-inquire'>
+        <div className='details-inquire' style={{ flexDirection: matches ? 'row' : 'column' }}>
                 <div className="listing-details">
-                {renderListingDetails(listing)}
+                    {renderListingDetails(listing)}
                 </div>
-                <Paper style={{ padding: 16 }}>
-                    <Typography variant="h6">INQUIRE</Typography>
-                    <form noValidate autoComplete="off">
-                        <TextField
-                            fullWidth
-                            label="Name"
-                            margin="normal"
-                        />
-                        <TextField
-                            fullWidth
-                            label="Phone"
-                            margin="normal"
-                        />
-                        <TextField
-                            fullWidth
-                            label="Email"
-                            margin="normal"
-                        />
-                        <TextField
-                            fullWidth
-                            label="Message"
-                            margin="normal"
-                            multiline
-                            rows={4}
-                        />
-                        <Button variant="contained" color="primary" style={{ marginTop: 16 }}>
-                            Submit
-                        </Button>
-                    </form>
-                </Paper>
+
+                {matches ? (
+                    // Show the form directly on screens wider than 1000px
+                    <Paper className='dtop-form-modal' style={{ width:'40%', padding: 16, margin: '16px 0' }}>
+                        <Typography variant="h6">INQUIRE</Typography>
+                        {inquiryForm}
+                    </Paper>
+                ) : (
+                    // Show a button to open the modal form on smaller screens
+                    <Button variant="contained" onClick={handleOpen} style={{ marginTop: 16 }}>
+                        Inquire
+                    </Button>
+                )}
             </div>
+
+            <Modal
+                open={modalOpen}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 400,
+                    bgcolor: 'background.paper',
+                    boxShadow: 24,
+                    p: 4,
+                }}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        INQUIRE
+                    </Typography>
+                    <Box id="modal-modal-description" sx={{ mt: 2 }}>
+                        {inquiryForm}
+                    </Box>
+                </Box>
+            </Modal>
+
         </div>
         
     );

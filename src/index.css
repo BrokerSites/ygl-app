@@ -457,5 +457,36 @@ width: fit-content;
 }
 
 .details-inquire{
-  display:flex
+  display:flex;
+  flex-direction: row;
+  margin: 2rem;
+  max-width: 70%;
+}
+
+.listing-details{
+  padding-right: 2rem;
+  width: 50%;
+}
+
+.prop-det-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.listing-details{
+  padding-right: 2rem;
+  width: 50%;
+}
+
+@media (max-width: 1000px) {
+  .listing-details {
+    padding-right: 0;
+    width: 100%;
+  }
+  .details-inquire{
+    margin:1rem;
+    max-width: 100%;
+  }
 }
