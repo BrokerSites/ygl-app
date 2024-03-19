@@ -77,6 +77,18 @@ const App = () => {
         setSelectedTags(selectedTags.filter(tag => tag !== tagToRemove));
     };
 
+    useEffect(() => {
+        // Other code...
+    
+        // When the component mounts, change the height of the body
+        document.body.style.height = 'auto';
+    
+        // Cleanup function to reset styles when the component unmounts
+        return () => {
+            // Reset any styles you've set
+            document.body.style.height = '';
+        };
+    }, []);
 
     useEffect(() => {
         const fetchCitiesAndNeighborhoods = async () => {

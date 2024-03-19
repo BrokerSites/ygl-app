@@ -10,7 +10,9 @@ const MarkerClusterGroup = ({ listings, siteDomain }) => {
     useEffect(() => {
       if (!map) return;
   
-      const markerClusterGroup = L.markerClusterGroup();
+      const markerClusterGroup = L.markerClusterGroup({
+        spiderfyDistanceMultiplier: 2 // Adjust this value as needed to increase spiderfy distance
+    });
   
       listings.forEach((listing) => {
         const { latitude, longitude, price, beds, baths, photos, city } = listing;

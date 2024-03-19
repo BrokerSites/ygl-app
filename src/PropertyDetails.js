@@ -32,6 +32,9 @@ const PropertyDetails = () => {
         // Set the body overflow to scroll when the component mounts
         document.body.style.overflow = 'scroll';
 
+
+
+
         const getSiteQueryParam = () => {
             const queryParams = new URLSearchParams(location.search);
             return queryParams.get('site');
@@ -158,7 +161,7 @@ const PropertyDetails = () => {
                 <Box
                     sx={{
                         width: '100%',
-                        height: '20em', // Adjust based on the height of two rows of images
+                        height: '15em', // Adjust based on the height of two rows of images
                         overflowX: 'auto'
                     }}
                 >
