@@ -88,31 +88,44 @@ const PropertyDetails = () => {
                 <h2>
                      {listing.beds} BR, {listing.baths} BA
                 </h2>
-                {listing.unitFeatures && (
-                    <List>
-                        <ListItem>
-                            <ListItemText primary="Features" secondary={listing.unitFeatures.join(", ")} />
-                        </ListItem>
-                    </List>
-                )}
+                {listing.unitFeatures && listing.unitFeatures.length > 0 && (
+                <>
+                    <Typography variant="h6"><strong>Features</strong></Typography>
+                    <ul>
+                        {listing.unitFeatures.map((feature, index) => (
+                            <li key={index}>{feature}</li>
+                        ))}
+                    </ul>
+                </>
+            )}
                 <div>
                     <strong>Available Date:</strong> {listing.availableDate}
                 </div>
+                {listing.heatSource && (
+                    <div>
+                        <strong>Heat Source:</strong> {listing.heatSource}
+                    </div>
+                )}
+                {listing.laundry && (
+                    <div>
+                        <strong>Laundry:</strong> {listing.laundry}
+                    </div>
+                )}
+                {listing.pet && (
+                    <div>
+                        <strong>Pet Policy:</strong> {listing.pet}
+                    </div>
+                )}
+                {listing.rentIncludes && listing.rentIncludes.length > 0 && (
+                    <div>
+                        <strong>Rent Includes:</strong> {listing.rentIncludes.join(", ")}
+                    </div>
+                )}
+                {listing.studentPolicy &&(
                 <div>
-                    <strong>Heat Source:</strong> {listing.heatSource}
+                <strong>Student Policy:</strong> {listing.studentPolicy}
                 </div>
-                <div>
-                    <strong>Laundry:</strong> {listing.laundry}
-                </div>
-                <div>
-                    <strong>Pet Policy:</strong> {listing.pet}
-                </div>
-                <div>
-                    <strong>Rent Includes:</strong> {listing.rentIncludes.join(", ")}
-                </div>
-                <div>
-                    <strong>Student Policy:</strong> {listing.studentPolicy}
-                </div>
+                )}
                 {listing.unitDescription && (
                     <div>
                         <strong>Unit Description:</strong> {listing.unitDescription}
@@ -157,33 +170,33 @@ const PropertyDetails = () => {
     return (
         <div className='prop-det-container'>
 
-            {propertyDetails.listings && propertyDetails.listings[0].unitPhotos && (
-                <Box
-                    sx={{
-                        width: '100%',
-                        height: '15em', // Adjust based on the height of two rows of images
-                        overflowX: 'auto'
-                    }}
-                >
-                    <ImageList cols={columns} rowHeight={200} gap={8}>
-                        {propertyDetails.listings[0].unitPhotos.map((item) => (
-                            <ImageListItem key={item.id}>
-                                <img
-                                    src={`${item.url}?w=164&h=164&fit=crop&auto=format`}
-                                    srcSet={`${item.url}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                                    alt={item.caption || 'Property Image'}
-                                    loading="lazy"
-                                    style={{
-                                        width: '100%', // Ensure the image covers the full width of its container
-                                        height: '100%', // Ensure the image covers the full height of its container
-                                        objectFit: 'cover' // Ensure the image is scaled to maintain its aspect ratio while fitting within the element's content box
-                                    }}
-                                />
-                            </ImageListItem>
-                        ))}
-                    </ImageList>
-                </Box>
-            )}
+{propertyDetails.listings && propertyDetails.listings[0].unitPhotos && propertyDetails.listings[0].unitPhotos.length > 0 && (
+    <Box
+        sx={{
+            width: '100%',
+            height: '15em', // Adjust based on the height of two rows of images
+            overflowX: 'auto'
+        }}
+    >
+        <ImageList cols={columns} rowHeight={200} gap={8}>
+            {propertyDetails.listings[0].unitPhotos.map((item) => (
+                <ImageListItem key={item.id}>
+                    <img
+                        src={`${item.url}?w=164&h=164&fit=crop&auto=format`}
+                        srcSet={`${item.url}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                        alt={item.caption || 'Property Image'}
+                        loading="lazy"
+                        style={{
+                            width: '100%', // Ensure the image covers the full width of its container
+                            height: '100%', // Ensure the image covers the full height of its container
+                            objectFit: 'cover' // Ensure the image is scaled to maintain its aspect ratio while fitting within the element's content box
+                        }}
+                    />
+                </ImageListItem>
+            ))}
+        </ImageList>
+    </Box>
+)}
         
         <div className='details-inquire' style={{ flexDirection: matches ? 'row' : 'column' }}>
                 <div className="listing-details">
@@ -192,7 +205,7 @@ const PropertyDetails = () => {
 
                 {matches ? (
                     // Show the form directly on screens wider than 1000px
-                    <Paper className='dtop-form-modal' style={{ width:'40%', padding: 16, margin: '16px 0' }}>
+                    <Paper className='dtop-form-modal' style={{ height:'fit-content', width:'40%', padding: 16, margin: '16px 0' }}>
                         <Typography variant="h6">INQUIRE</Typography>
                         {inquiryForm}
                     </Paper>

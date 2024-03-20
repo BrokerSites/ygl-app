@@ -480,7 +480,11 @@ width: fit-content;
 .listing-details{
   padding-right: 2rem;
   width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: .5em;
 }
+
 
 @media (max-width: 1000px) {
   .listing-details {
