@@ -25,6 +25,12 @@ const ListingsContainer = ({ listings, selectedTags, onRemoveTag, totalResults, 
       currentPage={currentPage}
       itemsPerPage={itemsPerPage}
       />
+      <PaginationComponent 
+        totalResults={totalResults}
+        itemsPerPage={itemsPerPage}
+        page={page}
+        onPageChange={onPageChange}
+      />
       </div>
       
     <div className='card-container'>
@@ -33,13 +39,7 @@ const ListingsContainer = ({ listings, selectedTags, onRemoveTag, totalResults, 
       ))}
     </div>
 
-    <PaginationComponent 
-          
-          totalResults={totalResults}
-          itemsPerPage={itemsPerPage}
-          page={page}
-          onPageChange={onPageChange}
-        />
+
 
     </div>
   );

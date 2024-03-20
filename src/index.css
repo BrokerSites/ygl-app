@@ -115,7 +115,8 @@ code {
 
 /* Assuming "listings-and-map" takes full width and you want to hide the map under 1000px width screens */
 @media (max-width: 1000px) {
-  .map-container {
+  .map-container,
+  .lc-tb-c {
     display: none !important;
 
   }
@@ -132,7 +133,8 @@ code {
 
 @media (min-width: 1000px) {
   .mobile-options,
-  .s-rb-wrap {
+  .s-rb-wrap,
+  .sb-pc {
     display: none;
   }
 
@@ -160,9 +162,6 @@ code {
     padding-right: 2em;
   }
 
-  .tag-box-container {
-    display: none;
-  }
 }
 
 .row {
@@ -285,9 +284,6 @@ code {
   padding-bottom: .25rem;
   padding-top: 0rem;  
   width: 100%;
-  
-  /* Optional padding for aesthetic purposes */
-
 }
 
 .tag-placeholder {
@@ -320,7 +316,7 @@ code {
 
 .option-input-div{
   display: flex;
-  gap: 10vw;
+  justify-content: space-between;
 }
 
 .option-input{
@@ -431,7 +427,7 @@ width: fit-content;
   display: flex;
   width: 100%;
   justify-content: space-between;
-  margin-top: .5rem;
+  margin: .5rem;
 }
 
 .sort-dropdown{
@@ -441,6 +437,7 @@ width: fit-content;
 
 .pagination-component{
   margin-bottom: .5rem;
+  align-items: center;
 }
 
 .card-container {
@@ -495,4 +492,8 @@ width: fit-content;
     margin:1rem;
     max-width: 100%;
   }
+  .tag-box-container{
+    display: none;
+  }
 }
+

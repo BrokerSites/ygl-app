@@ -6,6 +6,7 @@ import BedBathDropdown from './BedBathDropdown';
 import MoveIn from './MoveIn';
 import AllFilters from './AllFilters';
 import ResultsBanner from './ResultsBanner'; // Import ResultsBanner component
+import PaginationComponent from './PaginationComponent';
 
 const SearchBar = ({
     cities,
@@ -42,7 +43,9 @@ const SearchBar = ({
     itemsPerPage={itemsPerPage},
     setSelectedTags,
     setMinRent,
-    setMaxRent
+    setMaxRent,
+    page,
+
 }) => {
     const [searchText, setSearchText] = useState('');
 
@@ -266,6 +269,13 @@ const clearSearch = () => {
       sortParams={sortParams}
       currentPage={currentPage}
       itemsPerPage={itemsPerPage}
+      />
+        <PaginationComponent 
+        className="sb-pc"
+        totalResults={totalResults}
+        itemsPerPage={itemsPerPage}
+        page={page}
+        onPageChange={onPageChange}
       />
       </div>
   </div>

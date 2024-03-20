@@ -398,6 +398,8 @@ const App = () => {
                     onSortChange={handleSortChange}
                     currentPage={currentPage}
                     itemsPerPage={itemsPerPage}
+                    page={currentPage}
+                    onPageChange={handlePageChange}
                 />
             </div>
             <div className="desktop-view">
