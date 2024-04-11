@@ -15,7 +15,12 @@ const MarkerClusterGroup = ({ listings, siteDomain }) => {
     });
   
       listings.forEach((listing) => {
-        const { latitude, longitude, price, beds, baths, photos, city } = listing;
+        const { latitude, longitude, price, beds, baths, photos, city, } = listing;
+
+        if (!latitude || !longitude) {
+          console.warn('Listing has invalid coordinates:', listing);
+          return; // Skip this listing
+        }
       
         // Use a default image if there's no photo available
         const imageUrl = photos && photos.length > 0 ? photos[0] : 'https://ygl-search.s3.us-east-2.amazonaws.com/imgs/no-img.webp';

@@ -93,7 +93,7 @@ const App = () => {
     useEffect(() => {
         const fetchCitiesAndNeighborhoods = async () => {
             try {
-                const response = await axios.post('http://ec2-3-142-154-120.us-east-2.compute.amazonaws.com:3000/api/accounts', {
+                const response = await axios.post('https://server.brokersites.io/api/accounts', {
                     site: siteDomain
                 });
                 const xmlData = response.data;
@@ -134,7 +134,7 @@ const App = () => {
 
     const fetchRentals = async (params) => {
         try {
-            const response = await axios.post('http://ec2-3-142-154-120.us-east-2.compute.amazonaws.com:3000/api/rentals', params);
+            const response = await axios.post('https://server.brokersites.io/api/rentals', params);
             if (response.data && response.data.listings) {
                 setListings(response.data.listings);
                 setTotalResults(response.data.total);
@@ -331,7 +331,7 @@ const App = () => {
 
             (async () => {
                 try {
-                    const response = await axios.post('http://ec2-3-142-154-120.us-east-2.compute.amazonaws.com:3000/api/rentals', apiParams);
+                    const response = await axios.post('https://server.brokersites.io/api/rentals', apiParams);
                     console.log("Response from API:", response.data); // Log the entire response data from the API
                     setListings(response.data.listings || []);
                     setTotalResults(response.data.total || 0); // Update the total results
