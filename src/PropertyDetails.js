@@ -6,9 +6,6 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import { Grid, TextField, Button, Typography, Paper, Modal } from '@mui/material'; // Make sure Paper is included here
 
 
@@ -42,7 +39,7 @@ const PropertyDetails = () => {
 
         const siteDomain = getSiteQueryParam();
         if (id && siteDomain) {
-            const apiUrl = 'http://ec2-3-142-154-120.us-east-2.compute.amazonaws.com:3000/api/rentals';
+            const apiUrl = 'https://server.brokersites.io/api/rentals';
             const params = {
                 listing_id: id,
                 site: siteDomain
@@ -168,16 +165,15 @@ const PropertyDetails = () => {
     const listing = propertyDetails.listings[0];
 
     return (
-        <div className='prop-det-container'>
-
-{propertyDetails.listings && propertyDetails.listings[0].unitPhotos && propertyDetails.listings[0].unitPhotos.length > 0 && (
-    <Box
-        sx={{
-            width: '100%',
-            height: '15em', // Adjust based on the height of two rows of images
-            overflowX: 'auto'
-        }}
-    >
+    <div className='prop-det-container'>
+        {propertyDetails.listings && propertyDetails.listings[0].unitPhotos && propertyDetails.listings[0].unitPhotos.length > 0 && (
+        <Box
+            sx={{
+                width: '100%',
+                height: '15em', // Adjust based on the height of two rows of images
+                overflowX: 'auto'
+            }}
+        >
         <ImageList cols={columns} rowHeight={200} gap={8}>
             {propertyDetails.listings[0].unitPhotos.map((item) => (
                 <ImageListItem key={item.id}>
@@ -195,8 +191,8 @@ const PropertyDetails = () => {
                 </ImageListItem>
             ))}
         </ImageList>
-    </Box>
-)}
+        </Box>
+        )}
         
         <div className='details-inquire' style={{ flexDirection: matches ? 'row' : 'column' }}>
                 <div className="listing-details">
@@ -215,34 +211,36 @@ const PropertyDetails = () => {
                         Inquire
                     </Button>
                 )}
-            </div>
-
-            <Modal
-                open={modalOpen}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 400,
-                    bgcolor: 'background.paper',
-                    boxShadow: 24,
-                    p: 4,
-                }}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                        INQUIRE
-                    </Typography>
-                    <Box id="modal-modal-description" sx={{ mt: 2 }}>
-                        {inquiryForm}
-                    </Box>
-                </Box>
-            </Modal>
-
         </div>
+
+        <div className='save-footer'></div>
+
+        <Modal
+            open={modalOpen}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <Box sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 400,
+                bgcolor: 'background.paper',
+                boxShadow: 24,
+                p: 4,
+            }}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                    INQUIRE
+                </Typography>
+                <Box id="modal-modal-description" sx={{ mt: 2 }}>
+                    {inquiryForm}
+                </Box>
+            </Box>
+        </Modal>
+
+    </div>
         
     );
 };

@@ -115,6 +115,7 @@ code {
 
 /* Assuming "listings-and-map" takes full width and you want to hide the map under 1000px width screens */
 @media (max-width: 1000px) {
+
   .map-container,
   .lc-tb-c {
     display: none !important;
@@ -124,6 +125,7 @@ code {
 
 .search-bar {
   padding: .75em;
+  position: relative;
 
 }
 
@@ -132,6 +134,7 @@ code {
 }
 
 @media (min-width: 1000px) {
+
   .mobile-options,
   .s-rb-wrap,
   .sb-pc {
@@ -158,9 +161,7 @@ code {
     margin-bottom: .5rem;
   }
 
-  .listings-container {
-    padding-right: 2em;
-  }
+
 
 }
 
@@ -176,7 +177,7 @@ code {
 
 .mobile-view {
   display: none;
-  height: 83vh;
+  height: 70vh;
   overflow-y: auto;
 }
 
@@ -282,7 +283,7 @@ code {
   /* Ensures the tag box stays above other content */
   padding: 1rem;
   padding-bottom: .25rem;
-  padding-top: 0rem;  
+  padding-top: 0rem;
   width: 100%;
 }
 
@@ -314,12 +315,12 @@ code {
   color: white;
 }
 
-.option-input-div{
+.option-input-div {
   display: flex;
   justify-content: space-between;
 }
 
-.option-input{
+.option-input {
   width: 5em;
 }
 
@@ -332,7 +333,8 @@ code {
   border-radius: 4px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: auto;
-  max-width: 30%; /* Adjust this percentage based on your layout */
+  max-width: 30%;
+  /* Adjust this percentage based on your layout */
   overflow: hidden;
 }
 
@@ -345,7 +347,8 @@ code {
   border-radius: 4px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: auto;
-  max-width: 30%; /* Adjust this percentage based on your layout */
+  max-width: 30%;
+  /* Adjust this percentage based on your layout */
   overflow: hidden;
   display: flex !important;
   flex-direction: column;
@@ -368,15 +371,19 @@ code {
 }
 
 
-.mi-select{
-min-width: 150px;
-min-height: 26px;
-margin-right: 5px;
+.mi-select {
+  min-width: 150px;
+  min-height: 26px;
+  margin-right: 5px;
 
 }
 
-.p-btn, .bb-btn, .mi-btn, .af-btn, .c-btn{
-width: fit-content;
+.p-btn,
+.bb-btn,
+.mi-btn,
+.af-btn,
+.c-btn {
+  width: fit-content;
 }
 
 .af-input-overlay {
@@ -392,56 +399,59 @@ width: fit-content;
   flex-direction: column;
   gap: 2.5em;
   width: fit-content;
-  max-height: 90vh; /* Max height as a percentage of the viewport height */
-  overflow: auto; /* Enable scrolling */
+  max-height: 90vh;
+  /* Max height as a percentage of the viewport height */
+  overflow: auto;
+  /* Enable scrolling */
 }
 
 @media (max-width: 1000px) {
-.af-input-overlay{
-  top: 45% !important
-}
-  
+  .af-input-overlay {
+    top: 45% !important
+  }
+
 }
 
-.af-checks{
+.af-checks {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   flex-wrap: wrap;
 }
 
-.af-check-wrap{
+.af-check-wrap {
   display: flex;
   flex-direction: row;
   gap: 2px;
   margin: 0 5px 0 5px;
 }
 
-.input-container{
+.input-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.results-banner{
+.results-banner {
   display: flex;
   width: 100%;
   justify-content: space-between;
   margin: .5rem;
 }
 
-.sort-dropdown{
+.sort-dropdown {
   display: flex;
   gap: 3px;
 }
 
-.pagination-component{
+.pagination-component {
   margin-bottom: .5rem;
   align-items: center;
 }
 
 .card-container {
   width: 100%;
+  padding-right: 2em;
 }
 
 .leaflet-popup-content p {
@@ -449,32 +459,32 @@ width: fit-content;
   margin: 0.5em;
 }
 
-.bbcity{
+.bbcity {
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
 
-.details-inquire{
-  display:flex;
+.details-inquire {
+  display: flex;
   flex-direction: row;
   margin: 2rem;
   max-width: 70%;
 }
 
-.listing-details{
+.listing-details {
   padding-right: 2rem;
   width: 50%;
 }
 
-.prop-det-container{
+.prop-det-container {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 
-.listing-details{
+.listing-details {
   padding-right: 2rem;
   width: 50%;
   display: flex;
@@ -488,12 +498,25 @@ width: fit-content;
     padding-right: 0;
     width: 100%;
   }
-  .details-inquire{
-    margin:1rem;
+
+  .details-inquire {
+    margin: 1rem;
     max-width: 100%;
   }
-  .tag-box-container{
+
+  .tag-box-container {
     display: none;
   }
 }
 
+.save-footer {
+  height: 300px;
+  background-image: url('https://s3.us-east-2.amazonaws.com/app.brokersites.io/imgs/tiles.png');
+  width: 100%;
+}
+
+@media (min-width: 1000px) {
+  .save-footer {
+    display: none;
+  }
+}

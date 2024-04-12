@@ -32,15 +32,12 @@ const ListingsContainer = ({ listings, selectedTags, onRemoveTag, totalResults, 
         onPageChange={onPageChange}
       />
       </div>
-      
     <div className='card-container'>
     {listings.map(listing => (
         <ListingCard key={listing.id} listing={listing} siteDomain={siteDomain} />
       ))}
     </div>
-
-
-
+    <div className='save-footer'></div>
     </div>
   );
 };
