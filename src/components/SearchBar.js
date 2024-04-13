@@ -56,6 +56,14 @@ const SearchBar = ({
     const allFiltersButtonRef = useRef(null); // Add ref for Move-In button
 
     const modalRefs = useRef([]);
+
+    const closeAllFiltersModal = () => {
+        setModalState(prevState => ({
+            ...prevState,
+            showAllFiltersInput: false
+        }));
+    };
+
     const setModalRef = (element) => {
         // Make sure we are storing the element correctly and not overwriting with non-DOM values
         if (element) {
@@ -107,7 +115,7 @@ useEffect(() => {
           }
         }
       };
-      
+
 
     // We add the event listener if any modal is open
     if (modalState.showPriceInput || modalState.showBedBathInput || modalState.showMoveInInput || modalState.showAllFiltersInput) {
@@ -217,6 +225,7 @@ const clearSearch = () => {
             </button>
             {modalState.showAllFiltersInput && (
             <AllFilters
+                handleClose={closeAllFiltersModal} // Pass this function    
                 setRef={setModalRef} // new prop to pass the ref setting function
                 buttonRef={allFiltersButtonRef} // Pass ref to MoveIn
                 isOpen={modalState.showAllFiltersInput}

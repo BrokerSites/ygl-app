@@ -1,7 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Box, Slider } from '@mui/material';
+import { Box, Slider, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+
 
 const AllFilters = ({
+    handleClose,
     isOpen,
     setRef,
     minRent,
@@ -100,6 +103,13 @@ const AllFilters = ({
 
     return (
         <Box className="af-input-overlay" ref={dropdownRef} style={dropdownStyle} onClick={(e) => e.stopPropagation()}>
+        <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            style={{ position: 'absolute', right: 8, top: 8, color: 'grey' }}
+        >
+            <CloseIcon />
+        </IconButton>
             <div className='af-price'>
                 <div>PRICE</div>
             <Slider

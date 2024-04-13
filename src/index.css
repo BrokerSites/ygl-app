@@ -407,7 +407,8 @@ code {
 
 @media (max-width: 1000px) {
   .af-input-overlay {
-    top: 45% !important
+    top: 45% !important;
+    width: 95% !important;
   }
 
 }
