@@ -49,6 +49,7 @@ const PriceDropdown = ({ minRent, maxRent, onRentChange, isOpen, buttonRef, setR
                     name="minRent"
                     value={minRent}
                     onChange={handleInputChange}
+                    onClick={(e) => e.target.select()} // Add this line to select all text on click
                 />
                 <input
                     className='option-input'
@@ -56,6 +57,7 @@ const PriceDropdown = ({ minRent, maxRent, onRentChange, isOpen, buttonRef, setR
                     name="maxRent"
                     value={maxRent}
                     onChange={handleInputChange}
+                    onClick={(e) => e.target.select()} // Add this line to select all text on click
                 />
             </div>
         </Box>
