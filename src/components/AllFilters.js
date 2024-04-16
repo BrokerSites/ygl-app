@@ -127,6 +127,7 @@ const AllFilters = ({
                     name="minRent"
                     value={minRent}
                     onChange={handleInputChange}
+                    onClick={(e) => e.target.select()}
                 />
                 <input
                     className='option-input'
@@ -134,6 +135,7 @@ const AllFilters = ({
                     name="maxRent"
                     value={maxRent}
                     onChange={handleInputChange}
+                    onClick={(e) => e.target.select()}
                 />
             </div>
             </div>
