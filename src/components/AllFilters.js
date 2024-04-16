@@ -25,6 +25,16 @@ const AllFilters = ({
 }) => {
     const dropdownRef = useRef(null);
     const [dropdownStyle, setDropdownStyle] = useState({});
+    
+    const formatNumberWithCommas = (number) => {
+        // Only try to format if it's a number
+        return typeof number === 'number' ? number.toLocaleString() : number;
+    };
+    const parseNumberFromFormatted = (formattedString) => {
+        return formattedString ? parseInt(formattedString.replace(/,/g, ''), 10) : 0;
+    };
+
+
     const [filters, setFilters] = useState({
         pets: false,
         parking: false,
@@ -47,24 +57,22 @@ const AllFilters = ({
         }
     }, [isOpen, setRef, dropdownRef]);
 
-    const handleFilterChange = (filterName) => {
-        setFilters(prevFilters => ({
-            ...prevFilters,
-            [filterName]: !prevFilters[filterName],
-        }));
+    const handleSliderChange = (name, newValue) => {
+        if (name === 'rent') {
+            onRentChange(newValue);
+        } else {
+            const key = name; // 'beds' or 'baths'
+            onBedsBathsChange({ ...bedsBaths, [key]: newValue });
+        }
     };
 
     if (!isOpen) return null;
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        const newValue = Number(value);
-        if (name === 'minRent') {
-            onRentChange([newValue, maxRent]);
-        } else if (name === 'maxRent') {
-            onRentChange([minRent, newValue]);
-        }
+        onRentChange(name === 'minRent' ? [parseNumberFromFormatted(value), maxRent] : [minRent, parseNumberFromFormatted(value)]);
     };
+
 
     const handleBedsBathsChange = (event) => {
         
@@ -112,32 +120,32 @@ const AllFilters = ({
         </IconButton>
             <div className='af-price'>
                 <div>PRICE</div>
-            <Slider
-                value={[minRent, maxRent]}
-                onChange={(event, newValue) => onRentChange(newValue)}
-                valueLabelDisplay="auto"
-                min={0}
-                max={10000}
-                step={100}
-            />
-            <div className='option-input-div'>
-                <input
-                    className='option-input'
-                    type="number"
-                    name="minRent"
-                    value={minRent}
-                    onChange={handleInputChange}
-                    onClick={(e) => e.target.select()}
+                <Slider
+                    value={[minRent, maxRent]}
+                    onChange={(event, newValue) => handleSliderChange('rent', newValue)}
+                    valueLabelDisplay="auto"
+                    min={0}
+                    max={10000}
+                    step={100}
                 />
-                <input
-                    className='option-input'
-                    type="number"
-                    name="maxRent"
-                    value={maxRent}
-                    onChange={handleInputChange}
-                    onClick={(e) => e.target.select()}
-                />
-            </div>
+                <div className='option-input-div'>
+                    <input
+                        className='option-input'
+                        type="text"
+                        name="minRent"
+                        value={formatNumberWithCommas(minRent)}
+                        onChange={handleInputChange}
+                        onClick={(e) => e.target.select()}
+                    />
+                    <input
+                        className='option-input'
+                        type="text"
+                        name="maxRent"
+                        value={formatNumberWithCommas(maxRent)}
+                        onChange={handleInputChange}
+                        onClick={(e) => e.target.select()}
+                    />
+                </div>
             </div>
 
             <div className='af-bb-1'>
